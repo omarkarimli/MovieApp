@@ -132,8 +132,8 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.currentPage.observe(viewLifecycleOwner) { page ->
-            binding.btnPrev.isEnabled = page > 1
-            binding.btnNext.isEnabled = page < binding.tvTotalPageNumber.text.toString().toInt()
+            binding.btnPrev.visibility = if (page > 1) View.VISIBLE else View.INVISIBLE
+            binding.btnNext.visibility = if (page < binding.tvTotalPageNumber.text.toString().toInt()) View.VISIBLE else View.INVISIBLE
 
             binding.tvPageNumber.text = "$page"
         }
