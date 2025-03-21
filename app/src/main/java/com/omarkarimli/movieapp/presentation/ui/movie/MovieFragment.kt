@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.omarkarimli.movieapp.databinding.FragmentArticleBinding
+import com.omarkarimli.movieapp.databinding.FragmentMovieBinding
 import com.omarkarimli.movieapp.utils.Constants
 import com.omarkarimli.movieapp.menu.MorePopupMenuHandler
 import com.omarkarimli.movieapp.utils.getTimeAgo
@@ -28,7 +28,7 @@ class MovieFragment : Fragment() {
     lateinit var morePopupMenuHandler: MorePopupMenuHandler
 
     private val viewModel by viewModels<MovieViewModel>()
-    private var _binding: FragmentArticleBinding? = null
+    private var _binding: FragmentMovieBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -36,7 +36,7 @@ class MovieFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentArticleBinding.inflate(inflater, container, false)
+        _binding = FragmentMovieBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -48,7 +48,7 @@ class MovieFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        viewModel.fetchArticle(args.url, Constants.EVERYTHING)
+        viewModel.getMovieById(args.id)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,14 +80,13 @@ class MovieFragment : Fragment() {
             }
         }
 
-        viewModel.movie.observe(viewLifecycleOwner) { article ->
+        viewModel.movie.observe(viewLifecycleOwner) {
             binding.apply {
-                imageViewArticle.loadFromUrlToImage(article.urlToImage!!)
-                textViewNewsTitle.text = article.title
-                textViewArticleDesc.text = article.description
-                textViewPublishedAt.text = getTimeAgo(article.publishedAt!!)
-                textViewSourceName.text = article.source?.name
-                textViewNewsAuthor.text = article.author
+                imageViewMovie.loadFromUrlToImage(it.posterPath)
+
+                textViewOriginalTitle.text = it.originalTitle
+                textViewTitle.text = it.title
+                textViewOverview.text = it.overview
             }
         }
     }

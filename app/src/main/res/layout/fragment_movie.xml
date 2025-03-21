@@ -55,68 +55,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_source"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/imageView_category"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/cnn"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@id/imageView_category"
-                    app:layout_constraintEnd_toStartOf="@id/buttonFollow"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginHorizontal="16dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView_newsAuthor"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        style="@style/TextAppearance.Poppins.TitleMedium"
-                        android:text="BBC News" />
-
-                    <TextView
-                        android:id="@+id/textView_publishedAt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:text="4h ago" />
-                </LinearLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Material3.Button.OutlinedButton.Icon"
-                    android:id="@+id/buttonFollow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:cornerRadius="6dp"
-                    app:icon="@drawable/add"
-                    app:strokeColor="?colorPrimary"
-                    android:textAppearance="@style/TextAppearance.Poppins.TitleSmall"
-                    android:textColor="?colorPrimary"
-                    android:text="Follow" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageView_movie"
                 android:layout_width="match_parent"
@@ -127,13 +65,13 @@
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/textView_source_name"
+                android:id="@+id/textView_original_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_marginHorizontal="16dp"
                 style="@style/TextAppearance.Poppins.BodyLarge"
-                android:text="Source" />
+                android:text="Original Title" />
 
             <TextView
                 android:id="@+id/textView_title"
@@ -143,10 +81,10 @@
                 android:layout_marginHorizontal="16dp"
                 android:textSize="22dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Ukraine's President Zelensky to BBC: Blood money being paid for Russian oil" />
+                android:text="Title" />
 
             <TextView
-                android:id="@+id/textView_article_desc"
+                android:id="@+id/textView_overview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="12dp"

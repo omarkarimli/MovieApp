@@ -20,15 +20,15 @@ class MovieViewModel @Inject constructor(
     val loading = MutableLiveData(false)
     val error = MutableLiveData<String>()
 
-    fun fetchArticle(url: String, query: String) {
+    fun getMovieById(id: Int) {
         viewModelScope.launch {
             loading.value = true
             try {
-                val response = repo.getMovieById(url, query)
+                val response = repo.getMovieById(id)
                 movie.postValue(response)
             } catch (e: Exception) {
-                Log.e("ArticleViewModel", "Error: ${e.message}")
-                error.postValue("Failed to load article")
+                Log.e("MovieViewModel", "Error: ${e.message}")
+                error.postValue("Failed to load movie")
             } finally {
                 loading.value = false
             }

@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.omarkarimli.movieapp.databinding.FragmentExploreBinding
-import com.omarkarimli.movieapp.utils.Constants
 import com.omarkarimli.movieapp.utils.goneItem
 import com.omarkarimli.movieapp.utils.visibleItem
 import dagger.hilt.android.AndroidEntryPoint

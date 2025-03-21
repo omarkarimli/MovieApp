@@ -4,6 +4,8 @@ object Constants {
     const val API_KEY = "8734ee76b16967b44c4be8473fe8713b"
     const val BASE_URL = "https://api.themoviedb.org/3/"
 
+    const val POSTER_URL_PREFIX = "https://image.tmdb.org/t/p/w500"
+
     const val MOVIE_DB = "movieDB"
     const val movie = "movie"
 

@@ -6,17 +6,15 @@ import com.google.gson.reflect.TypeToken
 
 class Converters {
 
-    // Convert Source object to a JSON string
     @TypeConverter
-    fun fromSource(source: Source?): String? {
-        return source?.let { Gson().toJson(it) }
+    fun fromGenreIdsList(genreIds: List<Int?>?): String? {
+        return genreIds?.let { Gson().toJson(it) }
     }
 
-    // Convert JSON string to a Source object
     @TypeConverter
-    fun toSource(sourceString: String?): Source? {
-        return sourceString?.let {
-            val type = object : TypeToken<Source>() {}.type
+    fun toGenreIdsList(genreIdsString: String?): List<Int?>? {
+        return genreIdsString?.let {
+            val type = object : TypeToken<List<Int?>>() {}.type
             Gson().fromJson(it, type)
         }
     }

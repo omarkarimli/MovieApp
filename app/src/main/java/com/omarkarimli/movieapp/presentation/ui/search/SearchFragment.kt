@@ -5,18 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.tabs.TabLayout
-import com.omarkarimli.movieapp.adapters.ArticleAdapter
-import com.omarkarimli.movieapp.adapters.AuthorAdapter
-import com.omarkarimli.movieapp.adapters.SearchCategoryAdapter
 import com.omarkarimli.movieapp.databinding.FragmentSearchBinding
-import com.omarkarimli.movieapp.utils.Constants
 import com.omarkarimli.movieapp.menu.MorePopupMenuHandler
-import com.omarkarimli.movieapp.data.source.local.categoryList
 import com.omarkarimli.movieapp.utils.goneItem
 import com.omarkarimli.movieapp.utils.visibleItem
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,10 +20,6 @@ class SearchFragment : Fragment() {
 
     @Inject
     lateinit var morePopupMenuHandler: MorePopupMenuHandler
-
-    private val categoryAdapter = SearchCategoryAdapter()
-    private val articleAdapter = ArticleAdapter()
-    private val authorsAdapter = AuthorAdapter()
 
     private val viewModel by viewModels<SearchViewModel>()
     private var _binding: FragmentSearchBinding? = null
@@ -53,75 +42,8 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fetchCategories()
-        viewModel.fetchArticles(Constants.EVERYTHING)
-        viewModel.fetchAuthors()
-
         binding.back.setOnClickListener {
             findNavController().navigateUp()
-        }
-
-        articleAdapter.onMoreClick = { context, anchoredView, article ->
-            morePopupMenuHandler.showPopupMenu(context, anchoredView, article)
-        }
-        articleAdapter.onItemClick = { article ->
-            if (article.url != null) {
-                val action = SearchFragmentDirections.actionSearchFragmentToArticleFragment(article.url)
-                findNavController().navigate(action)
-            }
-        }
-
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                when (tab?.position) {
-                    0 -> {
-                        binding.rvCustom.adapter = articleAdapter
-                    }
-                    1 -> {
-                        binding.rvCustom.adapter = categoryAdapter
-                    }
-                    2 -> {
-                        binding.rvCustom.adapter = authorsAdapter
-                    }
-                }
-            }
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-        })
-
-        // Default adapter
-        binding.rvCustom.adapter = articleAdapter
-
-        binding.editTextSearch.doOnTextChanged { inputText, _, _, _ ->
-            val searchQuery = inputText.toString().trim()
-
-            if (searchQuery.isNotEmpty()) {
-                // Search in articles
-                viewModel.fetchArticles(searchQuery)
-
-                // Search in authors
-                val searchedAuthors = viewModel.authors.value?.filter {
-                    it.name?.contains(searchQuery, ignoreCase = true) == true
-                } ?: emptyList()
-                authorsAdapter.updateList(searchedAuthors)
-
-                // Search in categories
-                val searchedCategories = categoryList.filter {
-                    it.name?.contains(searchQuery, ignoreCase = true) == true
-                }
-                categoryAdapter.updateList(searchedCategories)
-            } else {
-                // Reset articles
-                viewModel.fetchArticles(Constants.EVERYTHING)
-
-                // Reset authors
-                viewModel.filteredAuthors.value = viewModel.authors.value
-
-                // Reset categories
-                viewModel.filteredCategories.value = categoryList
-            }
-
-            checkIfResultsAreEmpty()
         }
 
         observeData()
@@ -146,27 +68,6 @@ class SearchFragment : Fragment() {
                 binding.empty.goneItem()
                 binding.rvCustom.visibleItem()
             }
-        }
-
-        viewModel.articles.observe(viewLifecycleOwner) { articles ->
-            articleAdapter.updateList(articles)
-        }
-        viewModel.filteredAuthors.observe(viewLifecycleOwner) { authors ->
-            authorsAdapter.updateList(authors)
-        }
-        viewModel.filteredCategories.observe(viewLifecycleOwner) { categories ->
-            categoryAdapter.updateList(categories)
-        }
-    }
-
-    private fun checkIfResultsAreEmpty() {
-        val isArticlesEmpty = viewModel.filteredAuthors.value.isNullOrEmpty()
-        val isAuthorsEmpty = viewModel.filteredAuthors.value.isNullOrEmpty()
-        val isCategoriesEmpty = viewModel.filteredCategories.value.isNullOrEmpty()
-
-        val isResultEmpty = isArticlesEmpty && isAuthorsEmpty && isCategoriesEmpty
-        binding.empty.apply {
-            if (isResultEmpty) visibleItem() else goneItem()
         }
     }
 }
