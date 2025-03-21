@@ -1,21 +1,21 @@
 package com.omarkarimli.movieapp.data.source.local
 
-import com.omarkarimli.movieapp.domain.models.Article
+import com.omarkarimli.movieapp.domain.models.Movie
 import javax.inject.Inject
 
 class LocalDataSourceImpl @Inject constructor(
-    private val articleDao: ArticleDao
+    private val movieDao: MovieDao
 ) : LocalDataSource {
 
-    override suspend fun getAllArticlesLocally() = articleDao.getAll()
+    override suspend fun getAllMoviesLocally() = movieDao.getAll()
 
-    override suspend fun deleteArticleLocally(article: Article) = articleDao.delete(article)
+    override suspend fun deleteMovieLocally(movie: Movie) = movieDao.delete(movie)
 
-    override suspend fun getArticleByUrlLocally(url: String) = articleDao.getArticleByUrl(url)
+    override suspend fun getMovieByIdLocally(id: Int) = movieDao.getMovieById(id)
 
-    override suspend fun addArticleLocally(article: Article) = articleDao.addArticle(article)
+    override suspend fun addMovieLocally(movie: Movie) = movieDao.addMovie(movie)
 
-    override suspend fun updateArticleLocally(article: Article) = articleDao.updateArticle(article)
+    override suspend fun updateMovieLocally(movie: Movie) = movieDao.updateMovie(movie)
 
-    override suspend fun deleteAllArticlesLocally() = articleDao.deleteAll()
+    override suspend fun deleteAllMoviesLocally() = movieDao.deleteAll()
 }

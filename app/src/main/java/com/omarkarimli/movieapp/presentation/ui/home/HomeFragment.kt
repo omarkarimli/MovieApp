@@ -8,35 +8,26 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.omarkarimli.movieapp.adapters.ArticleAdapter
-import com.omarkarimli.movieapp.adapters.CategoryAdapter
-import com.omarkarimli.movieapp.adapters.TrendingAdapter
+import com.omarkarimli.movieapp.adapters.GenreAdapter
+import com.omarkarimli.movieapp.adapters.MovieAdapter
 import com.omarkarimli.movieapp.databinding.FragmentHomeBinding
-import com.omarkarimli.movieapp.domain.models.CategoryModel
 import com.omarkarimli.movieapp.utils.Constants
 import com.omarkarimli.movieapp.menu.MorePopupMenuHandler
-import com.omarkarimli.movieapp.data.source.local.categoryList
 import com.omarkarimli.movieapp.utils.goneItem
 import com.omarkarimli.movieapp.utils.visibleItem
+import com.omarkarimli.movieapp.adapters.TrendingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    private val categoryListCopy = categoryList.toMutableList().apply {
-        add(
-            0,
-            CategoryModel(id = 0, image = null, name = Constants.ALL, desc = null, isSelected = true)
-        )
-    }
-
     @Inject
     lateinit var morePopupMenuHandler: MorePopupMenuHandler
 
     private val trendingAdapter = TrendingAdapter()
-    private val categoryAdapter = CategoryAdapter()
-    private val articleAdapter = ArticleAdapter()
+    private val genreAdapter = GenreAdapter()
+    private val movieAdapter = MovieAdapter()
 
     private val viewModel by viewModels<HomeViewModel>()
     private var _binding: FragmentHomeBinding? = null
@@ -59,59 +50,46 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        viewModel.fetchArticles(Constants.EVERYTHING)
+        viewModel.fetchMovies(viewModel.currentPage)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        categoryAdapter.updateList(categoryListCopy)
-
         binding.editTextSearch.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToSearchFragment()
             findNavController().navigate(action)
         }
-        binding.trendingSeeAll.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToTrendingFragment()
-            findNavController().navigate(action)
-        }
 
-        trendingAdapter.onMoreClick = { context, anchoredView, article ->
+        trendingAdapter.onMoreClick = { context, anchoredView, movie ->
+            morePopupMenuHandler.showPopupMenu(context, anchoredView, movie)
+        }
+        movieAdapter.onMoreClick = { context, anchoredView, article ->
             morePopupMenuHandler.showPopupMenu(context, anchoredView, article)
         }
-        articleAdapter.onMoreClick = { context, anchoredView, article ->
-            morePopupMenuHandler.showPopupMenu(context, anchoredView, article)
-        }
-        articleAdapter.onItemClick = {
-            if (it.url != null) {
-                val action = HomeFragmentDirections.actionHomeFragmentToArticleFragment(it.url)
+        movieAdapter.onItemClick = {
+            if (it.id != null) {
+                val action = HomeFragmentDirections.actionHomeFragmentToMovieFragment(it.id)
                 findNavController().navigate(action)
             }
         }
         trendingAdapter.onItemClick = {
-            if (it.url != null) {
-                val action = HomeFragmentDirections.actionHomeFragmentToArticleFragment(it.url)
+            if (it.id != null) {
+                val action = HomeFragmentDirections.actionHomeFragmentToMovieFragment(it.id)
                 findNavController().navigate(action)
-            }
-        }
-        categoryAdapter.onItemClick = { category ->
-            if (!category.isSelected) {
-                categoryAdapter.updateList(categoryListCopy.map {
-                    it.copy(isSelected = it.name == category.name)
-                })
-
-                // Update Articles
-                if (category.name == Constants.ALL) {
-                    viewModel.fetchArticles(Constants.EVERYTHING)
-                } else {
-                    viewModel.fetchArticles(category.name!!)
-                }
             }
         }
 
         binding.rvTrending.adapter = trendingAdapter
-        binding.rvCategories.adapter = categoryAdapter
-        binding.rvArticles.adapter = articleAdapter
+        binding.rvGenres.adapter = genreAdapter
+        binding.rvMovies.adapter = movieAdapter
+
+        binding.btnNext.setOnClickListener {
+            viewModel.nextPage()
+        }
+        binding.btnPrev.setOnClickListener {
+            viewModel.prevPage()
+        }
 
         observeData()
     }
@@ -129,9 +107,16 @@ class HomeFragment : Fragment() {
             }
         }
 
-        viewModel.articles.observe(viewLifecycleOwner) { articles ->
-            articleAdapter.updateList(articles)
+        viewModel.movies.observe(viewLifecycleOwner) { articles ->
+            movieAdapter.updateList(articles)
             trendingAdapter.updateList(articles.take(Constants.TRENDING_VALUE))
+        }
+
+        viewModel.totalPages.observe(viewLifecycleOwner) { totalPages ->
+            binding.tvPageNumber.text = "Page ${viewModel.currentPage} of $totalPages"
+
+            binding.btnPrev.visibility = if (viewModel.currentPage > 1) View.VISIBLE else View.GONE
+            binding.btnNext.visibility = if (viewModel.currentPage < totalPages) View.VISIBLE else View.GONE
         }
     }
 }

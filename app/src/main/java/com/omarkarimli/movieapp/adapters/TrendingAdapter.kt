@@ -6,16 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.omarkarimli.movieapp.databinding.ItemTrendingBinding
-import com.omarkarimli.movieapp.domain.models.Article
-import com.omarkarimli.movieapp.utils.getTimeAgo
+import com.omarkarimli.movieapp.domain.models.Movie
 import com.omarkarimli.movieapp.utils.loadFromUrlToImage
 
 class TrendingAdapter : RecyclerView.Adapter<TrendingAdapter.TrendingViewHolder>() {
 
-    lateinit var onMoreClick: (context: Context, anchoredView: View, article: Article) -> Unit
-    lateinit var onItemClick: (article: Article) -> Unit
+    lateinit var onMoreClick: (context: Context, anchoredView: View, movie: Movie) -> Unit
+    lateinit var onItemClick: (movie: Movie) -> Unit
 
-    private var originalList = arrayListOf<Article>()
+    private var originalList = arrayListOf<Movie>()
 
     inner class TrendingViewHolder(val binding: ItemTrendingBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -35,18 +34,16 @@ class TrendingAdapter : RecyclerView.Adapter<TrendingAdapter.TrendingViewHolder>
         val instance = originalList[position]
 
         holder.binding.apply {
-            imageViewArticle.loadFromUrlToImage(instance.urlToImage)
-            textViewSourceName.text = instance.source?.name
-            textViewNewsTitle.text = instance.title
-            textViewNewsAuthor.text = instance.author
-            textViewPublishedAt.text = getTimeAgo(instance.publishedAt!!)
+            imageViewMovie.loadFromUrlToImage(instance.posterPath)
+            textViewTitle.text = instance.title
 
             buttonMore.setOnClickListener { onMoreClick(it.context, it, instance) }
+
             root.setOnClickListener { onItemClick(instance) }
         }
     }
 
-    fun updateList(newList: List<Article>) {
+    fun updateList(newList: List<Movie>) {
         originalList.clear()
         originalList.addAll(newList)
         notifyDataSetChanged()

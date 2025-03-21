@@ -4,14 +4,14 @@ import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.omarkarimli.movieapp.domain.repository.NewsRepository
+import com.omarkarimli.movieapp.domain.repository.MovieRepository
 import com.omarkarimli.movieapp.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val repo: NewsRepository,
+    private val repo: MovieRepository,
     private val sharedPreferences: SharedPreferences,
     private val provideAuth: FirebaseAuth
 ): ViewModel() {

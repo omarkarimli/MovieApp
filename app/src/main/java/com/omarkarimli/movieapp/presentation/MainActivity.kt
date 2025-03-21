@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         R.id.searchFragment,
         R.id.settingsFragment,
         R.id.editProfileFragment,
-        R.id.articleFragment
+        R.id.movieFragment
     )
 
     private fun setBottomNavigation() {

@@ -21,7 +21,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideNewsApiService(okHttpClient: OkHttpClient): ApiService {
+    fun provideApiService(okHttpClient: OkHttpClient): ApiService {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)

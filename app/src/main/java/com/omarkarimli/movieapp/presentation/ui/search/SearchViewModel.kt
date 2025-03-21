@@ -4,10 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.MutableLiveData
-import com.omarkarimli.movieapp.domain.models.Article
-import com.omarkarimli.movieapp.domain.models.CategoryModel
-import com.omarkarimli.movieapp.domain.models.SourceX
-import com.omarkarimli.movieapp.domain.repository.NewsRepository
+import com.omarkarimli.movieapp.domain.models.Movie
+import com.omarkarimli.movieapp.domain.models.GenreModel
+import com.omarkarimli.movieapp.domain.repository.MovieRepository
 import com.omarkarimli.movieapp.data.source.local.categoryList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,14 +14,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val repo: NewsRepository
+    private val repo: MovieRepository
 ) : ViewModel() {
 
-    val filteredCategories = MutableLiveData<List<CategoryModel>>()
+    val filteredCategories = MutableLiveData<List<GenreModel>>()
     val filteredAuthors = MutableLiveData<List<SourceX>>()
 
-    private val categories = MutableLiveData<List<CategoryModel>>()
-    val articles = MutableLiveData<List<Article>>()
+    private val categories = MutableLiveData<List<GenreModel>>()
+    val articles = MutableLiveData<List<Movie>>()
     val authors = MutableLiveData<List<SourceX>>()
 
     val empty = MutableLiveData(false)
@@ -34,7 +33,7 @@ class SearchViewModel @Inject constructor(
             empty.value = true
             loading.value = true
             try {
-                val response = repo.fetchAllArticles(query)
+                val response = repo.fetchAllMovies(query)
                 articles.value = response
 
                 empty.value = response.isEmpty()

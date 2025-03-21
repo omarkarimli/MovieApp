@@ -1,7 +1,7 @@
 package com.omarkarimli.movieapp.di
 
-import com.omarkarimli.movieapp.data.repository.NewsRepositoryImpl
-import com.omarkarimli.movieapp.domain.repository.NewsRepository
+import com.omarkarimli.movieapp.data.repository.MovieRepositoryImpl
+import com.omarkarimli.movieapp.domain.repository.MovieRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,6 +15,6 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindRepositoryModule(
-        repositoryImpl: NewsRepositoryImpl
-    ): NewsRepository
+        repositoryImpl: MovieRepositoryImpl
+    ): MovieRepository
 }

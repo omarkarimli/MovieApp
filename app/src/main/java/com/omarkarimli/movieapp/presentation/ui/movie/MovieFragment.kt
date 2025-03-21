@@ -1,4 +1,4 @@
-package com.omarkarimli.movieapp.presentation.ui.article
+package com.omarkarimli.movieapp.presentation.ui.movie
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,14 +20,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ArticleFragment : Fragment() {
+class MovieFragment : Fragment() {
 
-    private val args by navArgs<ArticleFragmentArgs>()
+    private val args by navArgs<MovieFragmentArgs>()
 
     @Inject
     lateinit var morePopupMenuHandler: MorePopupMenuHandler
 
-    private val viewModel by viewModels<ArticleViewModel>()
+    private val viewModel by viewModels<MovieViewModel>()
     private var _binding: FragmentArticleBinding? = null
     private val binding get() = _binding!!
 
@@ -59,8 +59,8 @@ class ArticleFragment : Fragment() {
         }
 
         binding.buttonMore.setOnClickListener {
-            if (viewModel.article.value != null) {
-                morePopupMenuHandler.showPopupMenu(it.context, it, viewModel.article.value!!)
+            if (viewModel.movie.value != null) {
+                morePopupMenuHandler.showPopupMenu(it.context, it, viewModel.movie.value!!)
             }
         }
 
@@ -80,7 +80,7 @@ class ArticleFragment : Fragment() {
             }
         }
 
-        viewModel.article.observe(viewLifecycleOwner) { article ->
+        viewModel.movie.observe(viewLifecycleOwner) { article ->
             binding.apply {
                 imageViewArticle.loadFromUrlToImage(article.urlToImage!!)
                 textViewNewsTitle.text = article.title

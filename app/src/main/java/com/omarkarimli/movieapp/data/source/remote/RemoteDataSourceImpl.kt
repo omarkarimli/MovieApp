@@ -6,8 +6,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.omarkarimli.movieapp.data.api.ApiService
-import com.omarkarimli.movieapp.domain.models.Article
-import com.omarkarimli.movieapp.domain.models.SourceX
+import com.omarkarimli.movieapp.domain.models.GenreModel
+import com.omarkarimli.movieapp.domain.models.Movie
 import com.omarkarimli.movieapp.domain.models.UserData
 import com.omarkarimli.movieapp.utils.Constants
 import kotlinx.coroutines.Dispatchers
@@ -22,44 +22,44 @@ class RemoteDataSourceImpl @Inject constructor(
     private val provideFirestore: FirebaseFirestore,
 ) : RemoteDataSource {
 
-    override suspend fun fetchAllSources(): List<SourceX> {
+    override suspend fun getMovieById(id: Int): Movie {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.getSources(Constants.API_KEY).awaitResponse()
-                response.body()?.sources ?: emptyList()
+                val response = apiService.getMovieById(id, Constants.API_KEY).awaitResponse()
+                response.body() ?: throw Exception("Response body is null")
+            } catch (e: Exception) {
+                throw Exception("getMovieById " + e.message.toString())
+            }
+        }
+    }
+
+    override suspend fun fetchAllMovies(page: Int): List<Movie> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.getMovies(Constants.API_KEY, page).awaitResponse()
+                response.body()?.movies?.filterNotNull() ?: emptyList()
             } catch (e: Exception) {
                 emptyList()
             }
         }
     }
 
-    override suspend fun getArticleByUrl(url: String, query: String): Article {
+    override suspend fun fetchMoviesByGenre(genreId: Int, page: Int): List<Movie> {
         return withContext(Dispatchers.IO) {
             try {
-                val articles = fetchAllArticles(query)
-                articles.find { it.url == url } ?: throw NoSuchElementException("No article found with URL: $url")
-            } catch (e: Exception) {
-                throw e
-            }
-        }
-    }
-
-    override suspend fun fetchAllArticles(query: String): List<Article> {
-        return withContext(Dispatchers.IO) {
-            try {
-                val response = apiService.getNews(query, Constants.API_KEY).awaitResponse()
-                response.body()?.articles?.filterNotNull() ?: emptyList()
+                val response = apiService.getMoviesByGenre(Constants.API_KEY, genreId, page).awaitResponse()
+                response.body()?.movies?.filterNotNull() ?: emptyList()
             } catch (e: Exception) {
                 emptyList()
             }
         }
     }
 
-    override suspend fun fetchArticlesByCategory(category: String): List<Article> {
+    override suspend fun fetchAllGenres(): List<GenreModel> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.getNewsByCategory(category, Constants.API_KEY)
-                response.articles?.filterNotNull() ?: emptyList()
+                val response = apiService.getGenres(Constants.API_KEY).awaitResponse()
+                response.body()?.genres ?: emptyList()
             } catch (e: Exception) {
                 emptyList()
             }

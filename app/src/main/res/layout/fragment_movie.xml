@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.article.ArticleFragment">
+    tools:context=".presentation.ui.movie.MovieFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -118,7 +118,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/imageView_article"
+                android:id="@+id/imageView_movie"
                 android:layout_width="match_parent"
                 android:layout_height="192dp"
                 android:layout_margin="16dp"
@@ -136,7 +136,7 @@
                 android:text="Source" />
 
             <TextView
-                android:id="@+id/textView_newsTitle"
+                android:id="@+id/textView_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"

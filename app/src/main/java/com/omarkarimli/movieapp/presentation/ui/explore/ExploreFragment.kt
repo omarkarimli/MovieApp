@@ -7,25 +7,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.omarkarimli.movieapp.adapters.ArticleAdapter
-import com.omarkarimli.movieapp.adapters.SearchCategoryAdapter
 import com.omarkarimli.movieapp.databinding.FragmentExploreBinding
 import com.omarkarimli.movieapp.utils.Constants
-import com.omarkarimli.movieapp.menu.MorePopupMenuHandler
 import com.omarkarimli.movieapp.utils.goneItem
 import com.omarkarimli.movieapp.utils.visibleItem
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ExploreFragment : Fragment() {
-
-    @Inject
-    lateinit var morePopupMenuHandler: MorePopupMenuHandler
-
-    private val categoryAdapter = SearchCategoryAdapter()
-    private val articleAdapter = ArticleAdapter()
 
     private val viewModel by viewModels<ExploreViewModel>()
     private var _binding: FragmentExploreBinding? = null
@@ -48,25 +37,10 @@ class ExploreFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        viewModel.fetchArticles(Constants.EVERYTHING)
-        viewModel.fetchCategories()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        articleAdapter.onMoreClick = { context, anchoredView, article ->
-            morePopupMenuHandler.showPopupMenu(context, anchoredView, article)
-        }
-        articleAdapter.onItemClick = { article ->
-            if (article.url != null) {
-                val action = ExploreFragmentDirections.actionExploreFragmentToArticleFragment(article.url)
-                findNavController().navigate(action)
-            }
-        }
-
-        binding.rvArticles.adapter = articleAdapter
-        binding.rvCategories.adapter = categoryAdapter
 
         observeData()
     }
@@ -81,13 +55,6 @@ class ExploreFragment : Fragment() {
             if (!errorMessage.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
             }
-        }
-
-        viewModel.articles.observe(viewLifecycleOwner) { articles ->
-            articleAdapter.updateList(articles)
-        }
-        viewModel.categories.observe(viewLifecycleOwner) { categories ->
-            categoryAdapter.updateList(categories)
         }
     }
 }

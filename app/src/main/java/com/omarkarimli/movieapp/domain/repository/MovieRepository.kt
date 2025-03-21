@@ -1,11 +1,13 @@
-package com.omarkarimli.movieapp.data.source.remote
+package com.omarkarimli.movieapp.domain.repository
 
-import com.google.firebase.auth.AuthResult
 import com.omarkarimli.movieapp.domain.models.GenreModel
 import com.omarkarimli.movieapp.domain.models.Movie
 import com.omarkarimli.movieapp.domain.models.UserData
+import kotlinx.coroutines.flow.Flow
 
-interface RemoteDataSource {
+interface MovieRepository {
+
+    // Remote
 
     suspend fun getMovieById(id: Int): Movie
 
@@ -15,15 +17,23 @@ interface RemoteDataSource {
 
     suspend fun fetchAllGenres(): List<GenreModel>
 
+
+
+
     suspend fun changePassword(email: String, currentPassword: String, newPassword: String)
 
     suspend fun fetchUserData(): UserData?
 
-    suspend fun loginUserAccount(isChecked: Boolean, email: String, password: String): AuthResult
+    // Local
+    suspend fun getAllMoviesLocally(): Flow<List<Movie>>
 
-    suspend fun registerNewUser(email: String, password: String): AuthResult
+    suspend fun deleteMovieLocally(movie: Movie)
 
-    suspend fun addUserToFirestore(userData: UserData)
+    suspend fun getMovieByIdLocally(id: Int): Movie?
 
-    suspend fun updateUserInFirestore(userData: UserData)
+    suspend fun addMovieLocally(movie: Movie)
+
+    suspend fun updateMovieLocally(movie: Movie)
+
+    suspend fun deleteAllMoviesLocally()
 }

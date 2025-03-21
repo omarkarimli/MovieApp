@@ -3,36 +3,36 @@ package com.omarkarimli.movieapp.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.omarkarimli.movieapp.databinding.ItemCategoryBinding
-import com.omarkarimli.movieapp.domain.models.CategoryModel
+import com.omarkarimli.movieapp.databinding.ItemGenreBinding
+import com.omarkarimli.movieapp.domain.models.GenreModel
 import com.omarkarimli.movieapp.utils.goneItem
 import com.omarkarimli.movieapp.utils.visibleItem
 
-class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+class GenreAdapter : RecyclerView.Adapter<GenreAdapter.GenreViewHolder>() {
 
-    lateinit var onItemClick: (CategoryModel) -> Unit
+    lateinit var onItemClick: (GenreModel) -> Unit
 
-    private var originalList = arrayListOf<CategoryModel>()
+    private var originalList = arrayListOf<GenreModel>()
 
-    inner class CategoryViewHolder(val binding: ItemCategoryBinding) :
+    inner class GenreViewHolder(val binding: ItemGenreBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val layout = ItemCategoryBinding.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenreViewHolder {
+        val layout = ItemGenreBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return CategoryViewHolder(layout)
+        return GenreViewHolder(layout)
     }
 
     override fun getItemCount(): Int {
         return originalList.size
     }
 
-    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: GenreViewHolder, position: Int) {
         val instance = originalList[position]
 
         holder.binding.apply {
-            textViewCategory.text = instance.name
+            textViewName.text = instance.name
 
             if (instance.isSelected) {
                 divider.visibleItem()
@@ -44,7 +44,7 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
         }
     }
 
-    fun updateList(newList: List<CategoryModel>) {
+    fun updateList(newList: List<GenreModel>) {
         originalList.clear()
         originalList.addAll(newList)
         notifyDataSetChanged()

@@ -1,19 +1,19 @@
 package com.omarkarimli.movieapp.data.source.local
 
-import com.omarkarimli.movieapp.domain.models.Article
+import com.omarkarimli.movieapp.domain.models.Movie
 import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSource {
 
-    suspend fun getAllArticlesLocally(): Flow<List<Article>>
+    suspend fun getAllMoviesLocally(): Flow<List<Movie>>
 
-    suspend fun deleteArticleLocally(article: Article)
+    suspend fun deleteMovieLocally(movie: Movie)
 
-    suspend fun getArticleByUrlLocally(url: String): Article?
+    suspend fun getMovieByIdLocally(id: Int): Movie?
 
-    suspend fun addArticleLocally(article: Article)
+    suspend fun addMovieLocally(movie: Movie)
 
-    suspend fun updateArticleLocally(article: Article)
+    suspend fun updateMovieLocally(movie: Movie)
 
-    suspend fun deleteAllArticlesLocally()
+    suspend fun deleteAllMoviesLocally()
 }

@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.omarkarimli.movieapp.adapters.ArticleAdapter
+import com.omarkarimli.movieapp.adapters.MovieAdapter
 import com.omarkarimli.movieapp.databinding.FragmentBookmarkBinding
 import com.omarkarimli.movieapp.menu.MorePopupMenuHandler
 import com.omarkarimli.movieapp.utils.goneItem
@@ -25,7 +25,7 @@ class BookmarkFragment : Fragment() {
     @Inject
     lateinit var morePopupMenuHandler: MorePopupMenuHandler
 
-    private val articleAdapter = ArticleAdapter()
+    private val movieAdapter = MovieAdapter()
     private val viewModel by viewModels<BookmarkViewModel>()
 
     private var _binding: FragmentBookmarkBinding? = null
@@ -47,27 +47,27 @@ class BookmarkFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.fetchArticles() // Ensure articles are loaded
+        viewModel.fetchMovies()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        articleAdapter.onMoreClick = { context, anchoredView, article ->
-            morePopupMenuHandler.showPopupMenu(context, anchoredView, article)
+        movieAdapter.onMoreClick = { context, anchoredView, movie ->
+            morePopupMenuHandler.showPopupMenu(context, anchoredView, movie)
         }
-        articleAdapter.onItemClick = { article ->
-            if (article.url != null) {
-                val action = BookmarkFragmentDirections.actionBookmarkFragmentToArticleFragment(article.url)
+        movieAdapter.onItemClick = {
+            if (it.id != null) {
+                val action = BookmarkFragmentDirections.actionBookmarkFragmentToMovieFragment(it.id)
                 findNavController().navigate(action)
             }
         }
 
-        binding.rvArticles.adapter = articleAdapter
+        binding.rvMovies.adapter = movieAdapter
 
         binding.editTextSearch.doOnTextChanged { inputText, _, _, _ ->
             val searchQuery = inputText.toString().trim()
-            viewModel.updateFilteredArticles(searchQuery) // Moved filtering logic to ViewModel
+            viewModel.updateFilteredMovies(searchQuery)
         }
 
         observeData()
@@ -76,8 +76,8 @@ class BookmarkFragment : Fragment() {
     private fun observeData() {
         viewLifecycleOwner.lifecycleScope.launch {
             launch {
-                viewModel.filteredArticles.collect { filteredArticles ->
-                    articleAdapter.updateList(filteredArticles)
+                viewModel.filteredMovies.collect { filteredArticles ->
+                    movieAdapter.updateList(filteredArticles)
                     updateEmptyState(filteredArticles.isEmpty())
                 }
             }
@@ -110,10 +110,10 @@ class BookmarkFragment : Fragment() {
     private fun updateEmptyState(isEmpty: Boolean) {
         if (isEmpty) {
             binding.empty.visibleItem()
-            binding.rvArticles.goneItem()
+            binding.rvMovies.goneItem()
         } else {
             binding.empty.goneItem()
-            binding.rvArticles.visibleItem()
+            binding.rvMovies.visibleItem()
         }
     }
 }

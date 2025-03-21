@@ -1,26 +1,36 @@
 package com.omarkarimli.movieapp.data.api
 
-import com.omarkarimli.movieapp.domain.models.NewsResponse
-import com.omarkarimli.movieapp.domain.models.SourceResponse
+import com.omarkarimli.movieapp.domain.models.GenreResponse
+import com.omarkarimli.movieapp.domain.models.Movie
+import com.omarkarimli.movieapp.domain.models.MovieResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.Call
+import retrofit2.http.Path
 
 interface ApiService {
-    @GET("everything")
-    fun getNews(
-        @Query("q") query: String,
-        @Query("apiKey") apiKey: String
-    ): Call<NewsResponse>
 
-    @GET("top-headlines")
-    suspend fun getNewsByCategory(
-        @Query("category") category: String,
-        @Query("apiKey") apiKey: String
-    ): NewsResponse
+    @GET("movie/{movie_id}")
+    fun getMovieById(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String
+    ): Call<Movie>
 
-    @GET("top-headlines/sources")
-    fun getSources(
-        @Query("apiKey") apiKey: String
-    ): Call<SourceResponse>
+    @GET("movie/popular")
+    fun getMovies(
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int
+    ): Call<MovieResponse>
+
+    @GET("discover/movie")
+    fun getMoviesByGenre(
+        @Query("api_key") apiKey: String,
+        @Query("with_genres") genreId: Int,
+        @Query("page") page: Int
+    ): Call<MovieResponse>
+
+    @GET("genre/movie/list")
+    fun getGenres(
+        @Query("api_key") apiKey: String
+    ): Call<GenreResponse>
 }

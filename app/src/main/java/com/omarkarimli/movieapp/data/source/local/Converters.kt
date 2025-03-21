@@ -3,7 +3,6 @@ package com.omarkarimli.movieapp.data.source.local
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.omarkarimli.movieapp.domain.models.Source
 
 class Converters {
 
