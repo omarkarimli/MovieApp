@@ -110,6 +110,9 @@ dependencies {
 
     // Lottie
     implementation("com.airbnb.android:lottie:6.0.0")
+
+    // Youtube Player
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
 }
 
 // Allow references to generated code

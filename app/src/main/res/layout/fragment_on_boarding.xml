@@ -23,7 +23,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:paddingVertical="40dp"
+        android:paddingVertical="24dp"
         android:paddingHorizontal="24dp">
 
         <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
@@ -34,7 +34,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:progressMode="true"
-            app:selectedDotColor="?colorOnPrimaryFixed"
+            app:selectedDotColor="?colorPrimary"
             app:dotsColor="?colorPrimaryFixed"
             app:dotsCornerRadius="8dp"
             app:dotsSize="8dp"
@@ -60,8 +60,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:backgroundTint="#1877F2"
-            app:cornerRadius="6dp"
+            android:backgroundTint="?colorPrimary"
+            style="@style/ShapeAppearance.Material3.Corner.Large"
             android:text="Next"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

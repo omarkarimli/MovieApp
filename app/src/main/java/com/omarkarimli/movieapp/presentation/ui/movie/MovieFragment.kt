@@ -1,6 +1,7 @@
 package com.omarkarimli.movieapp.presentation.ui.movie
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +11,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.omarkarimli.movieapp.databinding.FragmentMovieBinding
-import com.omarkarimli.movieapp.utils.Constants
 import com.omarkarimli.movieapp.menu.MorePopupMenuHandler
-import com.omarkarimli.movieapp.utils.getTimeAgo
+import com.omarkarimli.movieapp.utils.getFormattedDate
 import com.omarkarimli.movieapp.utils.goneItem
 import com.omarkarimli.movieapp.utils.loadFromUrlToImage
 import com.omarkarimli.movieapp.utils.visibleItem
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -83,11 +85,40 @@ class MovieFragment : Fragment() {
         viewModel.movie.observe(viewLifecycleOwner) {
             binding.apply {
                 imageViewMovie.loadFromUrlToImage(it.posterPath)
+                imageViewMovieCopy.loadFromUrlToImage(it.posterPath)
 
-                textViewOriginalTitle.text = it.originalTitle
                 textViewTitle.text = it.title
-                textViewOverview.text = it.overview
+                textViewOverview.text = it.overview ?: "No overview found"
+                textViewReleaseDate.text = it.releaseDate?.getFormattedDate()
+
+                textViewVoteAverage.text = it.voteAverage.toString()
+                textViewVoteCount.text = "(${it.voteCount} votes)"
+
+                textViewAdult.visibility = if (it.adult == true) View.VISIBLE else View.GONE
             }
         }
+
+        viewModel.videoKey.observe(viewLifecycleOwner) { key ->
+            if (!key.isNullOrEmpty()) {
+                setupYouTubePlayer(key)
+                binding.youtubePlayerView.visibleItem()
+            } else {
+                Log.e("YouTubePlayer", "No valid video key found!")
+                binding.youtubePlayerView.goneItem()
+
+                // Show "No Trailer Available" message
+                viewModel.error.value = "No Trailer Available"
+                binding.youtubePlayerView.goneItem()
+            }
+        }
+    }
+
+    private fun setupYouTubePlayer(videoKey: String) {
+        lifecycle.addObserver(binding.youtubePlayerView)
+        binding.youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                youTubePlayer.loadVideo(videoKey, 0f)
+            }
+        })
     }
 }

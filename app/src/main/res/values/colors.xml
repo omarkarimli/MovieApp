@@ -52,4 +52,5 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="light_gray">#EEF1F4</color>
     <color name="dark_gray">#667080</color>
+    <color name="orange">#e49600</color>
 </resources>

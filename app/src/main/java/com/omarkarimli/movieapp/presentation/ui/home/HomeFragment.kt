@@ -16,6 +16,7 @@ import com.omarkarimli.movieapp.menu.MorePopupMenuHandler
 import com.omarkarimli.movieapp.utils.goneItem
 import com.omarkarimli.movieapp.utils.visibleItem
 import com.omarkarimli.movieapp.adapters.TrendingAdapter
+import com.omarkarimli.movieapp.domain.models.GenreModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -50,7 +51,8 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        viewModel.fetchMovies(viewModel.currentPage)
+        viewModel.fetchMovies(viewModel.currentPage.value ?: 1)
+        viewModel.fetchGenres()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,15 +82,26 @@ class HomeFragment : Fragment() {
             }
         }
 
+        genreAdapter.onItemClick = {
+            viewModel.fetchMoviesByGenre(it.id, viewModel.currentPage.value!!)
+
+            genreAdapter.updateList(
+                viewModel.genres.value?.map { genre ->
+                    genre.copy(isSelected = genre.id == it.id)
+                } ?: emptyList()
+            )
+        }
+
         binding.rvTrending.adapter = trendingAdapter
         binding.rvGenres.adapter = genreAdapter
         binding.rvMovies.adapter = movieAdapter
 
         binding.btnNext.setOnClickListener {
-            viewModel.nextPage()
+            viewModel.changePage(true) // Move to next page
         }
+
         binding.btnPrev.setOnClickListener {
-            viewModel.prevPage()
+            viewModel.changePage(false) // Move to previous page
         }
 
         observeData()
@@ -99,6 +112,10 @@ class HomeFragment : Fragment() {
             binding.progressBar.apply {
                 if (isLoading) visibleItem() else goneItem()
             }
+
+            binding.layoutPagination.apply {
+                if (isLoading) goneItem() else visibleItem()
+            }
         }
 
         viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
@@ -107,16 +124,26 @@ class HomeFragment : Fragment() {
             }
         }
 
-        viewModel.movies.observe(viewLifecycleOwner) { articles ->
-            movieAdapter.updateList(articles)
-            trendingAdapter.updateList(articles.take(Constants.TRENDING_VALUE))
+        viewModel.movies.observe(viewLifecycleOwner) {
+            if (it != null) {
+                movieAdapter.updateList(it)
+                trendingAdapter.updateList(it.take(Constants.TRENDING_VALUE))
+            }
+        }
+
+        viewModel.currentPage.observe(viewLifecycleOwner) { page ->
+            binding.btnPrev.isEnabled = page > 1
+            binding.btnNext.isEnabled = page < binding.tvTotalPageNumber.text.toString().toInt()
+
+            binding.tvPageNumber.text = "$page"
         }
 
         viewModel.totalPages.observe(viewLifecycleOwner) { totalPages ->
-            binding.tvPageNumber.text = "Page ${viewModel.currentPage} of $totalPages"
+            binding.tvTotalPageNumber.text = "$totalPages"
+        }
 
-            binding.btnPrev.visibility = if (viewModel.currentPage > 1) View.VISIBLE else View.GONE
-            binding.btnNext.visibility = if (viewModel.currentPage < totalPages) View.VISIBLE else View.GONE
+        viewModel.genres.observe(viewLifecycleOwner) {
+            genreAdapter.updateList(it)
         }
     }
 }

@@ -3,17 +3,23 @@ package com.omarkarimli.movieapp.data.source.remote
 import com.google.firebase.auth.AuthResult
 import com.omarkarimli.movieapp.domain.models.GenreModel
 import com.omarkarimli.movieapp.domain.models.Movie
+import com.omarkarimli.movieapp.domain.models.MovieResponse
+import com.omarkarimli.movieapp.domain.models.MovieVideo
 import com.omarkarimli.movieapp.domain.models.UserData
 
 interface RemoteDataSource {
 
     suspend fun getMovieById(id: Int): Movie
 
-    suspend fun fetchAllMovies(page: Int): List<Movie>
+    suspend fun fetchAllMovies(page: Int): MovieResponse
 
-    suspend fun fetchMoviesByGenre(genreId: Int, page: Int): List<Movie>
+    suspend fun fetchMoviesByGenre(genreId: Int, page: Int): MovieResponse
 
     suspend fun fetchAllGenres(): List<GenreModel>
+
+    suspend fun getMovieVideos(id: Int): List<MovieVideo>
+
+
 
     suspend fun changePassword(email: String, currentPassword: String, newPassword: String)
 

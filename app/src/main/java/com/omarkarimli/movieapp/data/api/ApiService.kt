@@ -3,6 +3,7 @@ package com.omarkarimli.movieapp.data.api
 import com.omarkarimli.movieapp.domain.models.GenreResponse
 import com.omarkarimli.movieapp.domain.models.Movie
 import com.omarkarimli.movieapp.domain.models.MovieResponse
+import com.omarkarimli.movieapp.domain.models.MovieVideoResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.Call
@@ -33,4 +34,10 @@ interface ApiService {
     fun getGenres(
         @Query("api_key") apiKey: String
     ): Call<GenreResponse>
+
+    @GET("movie/{movie_id}/videos")
+    suspend fun getMovieVideos(
+        @Path("movie_id") id: Int,
+        @Query("api_key") apiKey: String
+    ): MovieVideoResponse
 }

@@ -21,6 +21,8 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun fetchAllGenres() = remoteDataSource.fetchAllGenres()
 
+    override suspend fun getMovieVideos(id: Int) = remoteDataSource.getMovieVideos(id)
+
 
 
     override suspend fun changePassword(email: String, currentPassword: String, newPassword: String) = remoteDataSource.changePassword(email, currentPassword, newPassword)

@@ -1,5 +1,6 @@
 package com.omarkarimli.movieapp.data.source.remote
 
+import android.util.Log
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -8,6 +9,8 @@ import com.google.firebase.firestore.SetOptions
 import com.omarkarimli.movieapp.data.api.ApiService
 import com.omarkarimli.movieapp.domain.models.GenreModel
 import com.omarkarimli.movieapp.domain.models.Movie
+import com.omarkarimli.movieapp.domain.models.MovieResponse
+import com.omarkarimli.movieapp.domain.models.MovieVideo
 import com.omarkarimli.movieapp.domain.models.UserData
 import com.omarkarimli.movieapp.utils.Constants
 import kotlinx.coroutines.Dispatchers
@@ -33,24 +36,24 @@ class RemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchAllMovies(page: Int): List<Movie> {
+    override suspend fun fetchAllMovies(page: Int): MovieResponse {
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiService.getMovies(Constants.API_KEY, page).awaitResponse()
-                response.body()?.movies?.filterNotNull() ?: emptyList()
+                response.body() ?: throw Exception("Response body is null")
             } catch (e: Exception) {
-                emptyList()
+                throw Exception("fetchAllMovies " + e.message.toString())
             }
         }
     }
 
-    override suspend fun fetchMoviesByGenre(genreId: Int, page: Int): List<Movie> {
+    override suspend fun fetchMoviesByGenre(genreId: Int, page: Int): MovieResponse {
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiService.getMoviesByGenre(Constants.API_KEY, genreId, page).awaitResponse()
-                response.body()?.movies?.filterNotNull() ?: emptyList()
+                response.body() ?: throw Exception("Response body is null")
             } catch (e: Exception) {
-                emptyList()
+                throw Exception("fetchMoviesByGenre " + e.message.toString())
             }
         }
     }
@@ -60,6 +63,17 @@ class RemoteDataSourceImpl @Inject constructor(
             try {
                 val response = apiService.getGenres(Constants.API_KEY).awaitResponse()
                 response.body()?.genres ?: emptyList()
+            } catch (e: Exception) {
+                emptyList()
+            }
+        }
+    }
+
+    override suspend fun getMovieVideos(id: Int): List<MovieVideo> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.getMovieVideos(id, Constants.API_KEY)
+                response.results
             } catch (e: Exception) {
                 emptyList()
             }

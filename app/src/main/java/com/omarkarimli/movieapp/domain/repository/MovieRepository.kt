@@ -2,21 +2,23 @@ package com.omarkarimli.movieapp.domain.repository
 
 import com.omarkarimli.movieapp.domain.models.GenreModel
 import com.omarkarimli.movieapp.domain.models.Movie
+import com.omarkarimli.movieapp.domain.models.MovieResponse
+import com.omarkarimli.movieapp.domain.models.MovieVideo
 import com.omarkarimli.movieapp.domain.models.UserData
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
 
     // Remote
-
     suspend fun getMovieById(id: Int): Movie
 
-    suspend fun fetchAllMovies(page: Int): List<Movie>
+    suspend fun fetchAllMovies(page: Int): MovieResponse
 
-    suspend fun fetchMoviesByGenre(genreId: Int, page: Int): List<Movie>
+    suspend fun fetchMoviesByGenre(genreId: Int, page: Int): MovieResponse
 
     suspend fun fetchAllGenres(): List<GenreModel>
 
+    suspend fun getMovieVideos(id: Int): List<MovieVideo>
 
 
 
