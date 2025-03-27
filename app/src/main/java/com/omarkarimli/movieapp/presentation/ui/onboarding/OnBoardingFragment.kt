@@ -40,18 +40,18 @@ class OnBoardingFragment : Fragment() {
         val onBoardingList = listOf(
             OnBoardingModel(
                 R.drawable.onboarding1,
-                "Lorem Ipsum is simply\ndummy",
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                "Welcome to Mova",
+                "The best place to watch movies."
             ),
             OnBoardingModel(
                 R.drawable.onboarding2,
-                "Lorem Ipsum is simply\ndummy",
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                "Discover New Movies",
+                "Find and explore the latest and\ntrending movies with ease."
             ),
             OnBoardingModel(
                 R.drawable.onboarding3,
-                "Lorem Ipsum is simply\ndummy",
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                "Enjoy Streaming",
+                "Watch your favorite movies anytime,\nanywhere without interruptions."
             ),
         )
 
@@ -76,11 +76,6 @@ class OnBoardingFragment : Fragment() {
             } else {
                 val action = OnBoardingFragmentDirections.actionOnBoardingFragmentToLoginFragment()
                 findNavController().navigate(action)
-            }
-        }
-        binding.buttonBack.setOnClickListener {
-            if (binding.viewPager2.currentItem > 0) {
-                binding.viewPager2.currentItem -= 1
             }
         }
     }

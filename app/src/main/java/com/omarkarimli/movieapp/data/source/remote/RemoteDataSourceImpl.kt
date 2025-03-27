@@ -36,6 +36,15 @@ class RemoteDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun searchMovies(query: String, page: Int): MovieResponse {
+        return try {
+            val response = apiService.searchMovies(query, Constants.API_KEY, page)
+            response
+        } catch (e: Exception) {
+            throw Exception("Error in searchMovies: ${e.message}")
+        }
+    }
+
     override suspend fun fetchAllMovies(page: Int): MovieResponse {
         return withContext(Dispatchers.IO) {
             try {

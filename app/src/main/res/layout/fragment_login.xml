@@ -11,48 +11,49 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:gravity="center"
         android:padding="24dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello"
-            android:fontFamily="@font/poppins_semibold"
-            android:textColor="?colorOnSecondaryContainer"
-            android:textFontWeight="700"
-            android:textSize="48sp" />
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginBottom="32dp"
+            android:src="@drawable/app_icon"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Again!"
-            android:fontFamily="@font/poppins_semibold"
-            android:textColor="?colorPrimary"
-            android:textFontWeight="700"
-            android:textSize="48sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Welcome back you’ve\nbeen missed"
-            android:textColor="?colorOnSecondaryContainer"
+            android:text="Login into your account"
+            android:layout_marginBottom="32dp"
+            android:textAppearance="@style/TextAppearance.Poppins.HeadlineLarge"
+            android:textColor="?colorOnBackground"
             android:textSize="20sp"
-            android:layout_marginBottom="32dp" />
+            android:textAlignment="center"/>
 
         <!-- Email -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" >
+            android:layout_marginBottom="16dp"
+            app:boxBackgroundMode="filled"
+            app:boxBackgroundColor="?colorSurfaceContainer"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
+            app:startIconDrawable="@drawable/baseline_email_24"
+            app:startIconTint="?colorOutline"
+            app:boxStrokeColor="@android:color/transparent"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="48dp"
+                android:paddingEnd="48dp"
                 android:inputType="textEmailAddress"
-                style="@style/TextAppearance.Poppins.BodyLarge"
-                android:hint="Email" />
+                android:textAppearance="@style/TextAppearance.Poppins.BodyLarge"
+                android:hint="@string/email" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Password -->
@@ -60,35 +61,33 @@
             android:id="@+id/textInputLayoutPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true">
+            app:endIconMode="password_toggle"
+            app:boxBackgroundMode="filled"
+            app:boxBackgroundColor="?colorSurfaceContainer"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
+            app:startIconDrawable="@drawable/baseline_lock_24"
+            app:startIconTint="?colorOutline"
+            app:boxStrokeColor="@android:color/transparent"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="48dp"
+                android:paddingEnd="48dp"
                 android:inputType="textPassword"
                 style="@style/TextAppearance.Poppins.BodyLarge"
-                android:hint="Password" />
+                android:hint="@string/password" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <CheckBox
-                android:id="@+id/rememberMe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:layout_weight="1"
-                android:text="Remember me" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Forgot the password?"
-                android:textColor="?colorPrimary" />
-        </LinearLayout>
+        <CheckBox
+            android:id="@+id/rememberMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/remember_me" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonLogin"
@@ -96,10 +95,10 @@
             android:layout_height="wrap_content"
             android:paddingVertical="12dp"
             android:backgroundTint="?colorPrimary"
-            app:cornerRadius="6dp"
-            style="@style/TextAppearance.Poppins.TitleSmall"
+            style="@style/ShapeAppearance.Material3.Corner.Large"
+            android:textAppearance="@style/TextAppearance.Poppins.TitleMedium"
             android:textColor="?android:colorBackground"
-            android:text="Login" />
+            android:text="@string/login" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -129,7 +128,7 @@
                 android:maxLines="1"
                 android:textColor="@color/dark_gray"
                 style="@style/TextAppearance.Poppins.TitleSmall"
-                android:text="Facebook"/>
+                android:text="@string/facebook"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonGoogle"
@@ -148,7 +147,7 @@
                 android:maxLines="1"
                 android:textColor="@color/dark_gray"
                 style="@style/TextAppearance.Poppins.TitleSmall"
-                android:text="Google" />
+                android:text="@string/google" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

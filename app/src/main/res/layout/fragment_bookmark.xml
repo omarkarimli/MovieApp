@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="16dp"
-    android:paddingTop="16dp">
+    android:paddingTop="32dp">
 
     <TextView
         android:visibility="gone"
@@ -40,10 +40,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/page_name"
         android:layout_marginTop="8dp"
-        android:hint="@string/search"
+        app:boxBackgroundMode="filled"
+        app:boxBackgroundColor="?colorSurfaceContainer"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
         app:startIconDrawable="@drawable/search"
-        app:endIconMode="custom"
-        app:endIconDrawable="@drawable/filter" >
+        app:startIconTint="?colorOutline"
+        app:boxStrokeColor="@android:color/transparent"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        android:hint="@string/search" >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editText_search"

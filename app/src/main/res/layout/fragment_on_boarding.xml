@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/containerBottom"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -31,8 +31,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:progressMode="true"
             app:selectedDotColor="?colorPrimary"
             app:dotsColor="?colorPrimaryFixed"
@@ -42,27 +42,20 @@
             app:dotsWidthFactor="2.5" />
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.TextButton"
-            android:id="@+id/buttonBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/buttonNext"
-            android:fontFamily="@font/poppins_medium"
-            android:textColor="#B0B3B8"
-            android:text="Back"/>
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonNext"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dots_indicator"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
             android:backgroundTint="?colorPrimary"
             style="@style/ShapeAppearance.Material3.Corner.Large"
-            android:text="Next"/>
+            android:padding="12dp"
+            android:textAppearance="@style/TextAppearance.Poppins.TitleMedium"
+            android:text="@string/next"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

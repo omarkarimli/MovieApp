@@ -45,7 +45,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonEditProfile.setOnClickListener {
+        binding.layoutEditProfile.setOnClickListener {
             val userData = viewModel.userData.value
             if (userData == null) {
                 Toast.makeText(requireContext(), "User data is not available", Toast.LENGTH_LONG).show()
@@ -56,12 +56,12 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        binding.buttonSettings.setOnClickListener {
+        binding.layoutSettings.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToSettingsFragment()
             findNavController().navigate(action)
         }
 
-        binding.buttonWebsite.setOnClickListener {
+        binding.layoutWebsite.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(viewModel.userData.value?.website)
             startActivity(intent)

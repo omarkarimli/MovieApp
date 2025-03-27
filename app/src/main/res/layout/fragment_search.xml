@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="32dp"
     tools:context=".presentation.ui.search.SearchFragment" >
 
     <com.airbnb.lottie.LottieAnimationView
@@ -33,38 +34,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Top App Bar -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/topAppBar"
-        android:layout_width="match_parent"
+    <com.google.android.material.button.MaterialButton
+        style="?attr/materialIconButtonStyle"
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="12dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:icon="@drawable/back"
+        app:iconTint="?colorOnBackground" />
 
-        <com.google.android.material.button.MaterialButton
-            style="?attr/materialIconButtonStyle"
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="Back"
-            app:icon="@drawable/back"
-            app:iconTint="?colorOnBackground" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Search"
-            style="@style/TextAppearance.Poppins.TitleMedium"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/page_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/back"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:text="@string/search"
+        style="@style/TextAppearance.Poppins.HeadlineLarge"/>
 
     <!-- Search -->
     <com.google.android.material.textfield.TextInputLayout
@@ -74,12 +62,18 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topAppBar"
+        app:layout_constraintTop_toBottomOf="@id/page_name"
         android:layout_marginHorizontal="16dp"
-        android:hint="@string/search"
+        android:layout_marginTop="8dp"
+        app:boxBackgroundMode="filled"
+        app:boxBackgroundColor="?colorSurfaceContainer"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
         app:startIconDrawable="@drawable/search"
-        app:endIconMode="custom"
-        app:endIconDrawable="@drawable/filter" >
+        app:startIconTint="?colorOutline"
+        app:boxStrokeColor="@android:color/transparent"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        android:hint="@string/search" >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editText_search"
@@ -89,17 +83,73 @@
             android:paddingEnd="48dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_custom"
+        android:id="@+id/rv_movies"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textInputLayout_search"
+        app:layout_constraintBottom_toTopOf="@id/layout_pagination"
+        android:layout_margin="16dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
+        android:orientation="vertical"
+        android:nestedScrollingEnabled="false" />
+
+    <LinearLayout
+        android:id="@+id/layout_pagination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="vertical"/>
+        app:layout_constraintTop_toBottomOf="@id/rv_movies"
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <com.google.android.material.button.MaterialButton
+            style="?attr/materialIconButtonStyle"
+            android:id="@+id/btnPrev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/back"
+            app:iconTint="?colorOnBackground"
+            android:backgroundTint="?colorSurface"
+            app:iconSize="22dp" />
+
+        <TextView
+            android:id="@+id/tvPageNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Poppins.TitleMedium"
+            android:text="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            style="@style/TextAppearance.Poppins.TitleMedium"
+            android:text="of" />
+
+        <TextView
+            android:id="@+id/tvTotalPageNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Poppins.TitleMedium"
+            android:text="365" />
+
+        <com.google.android.material.button.MaterialButton
+            style="?attr/materialIconButtonStyle"
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/next"
+            app:iconTint="?colorOnBackground"
+            android:backgroundTint="?colorSurface"
+            app:iconSize="22dp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

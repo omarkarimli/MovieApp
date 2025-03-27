@@ -11,9 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="Onboarding"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@id/containerText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Gradient Overlay -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/gradient_overlay"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,25 +34,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="172dp"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:gravity="center"
+        android:layout_gravity="center_horizontal">
 
         <TextView
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lorem Ipsum is simply\ndummy"
+            android:text="Lorem Ipsum"
+            android:textAlignment="center"
             android:fontFamily="@font/poppins_semibold"
-            android:textColor="?colorOnBackground"
-            android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall" />
+            android:textColor="?android:colorBackground"
+            android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge" />
 
         <TextView
             android:id="@+id/textViewDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lorem Ipsum is simply dummy text of\nthe printing and typesetting industry."
-            android:textColor="?colorOnBackground"
-            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+            android:textColor="?android:colorBackground"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

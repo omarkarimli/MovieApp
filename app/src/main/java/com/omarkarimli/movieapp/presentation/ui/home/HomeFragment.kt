@@ -10,13 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.omarkarimli.movieapp.adapters.GenreAdapter
 import com.omarkarimli.movieapp.adapters.MovieAdapter
-import com.omarkarimli.movieapp.databinding.FragmentHomeBinding
-import com.omarkarimli.movieapp.utils.Constants
-import com.omarkarimli.movieapp.menu.MorePopupMenuHandler
-import com.omarkarimli.movieapp.utils.goneItem
-import com.omarkarimli.movieapp.utils.visibleItem
 import com.omarkarimli.movieapp.adapters.TrendingAdapter
-import com.omarkarimli.movieapp.domain.models.GenreModel
+import com.omarkarimli.movieapp.databinding.FragmentHomeBinding
+import com.omarkarimli.movieapp.menu.MorePopupMenuHandler
+import com.omarkarimli.movieapp.utils.Constants
+import com.omarkarimli.movieapp.utils.goneItem
+import com.omarkarimli.movieapp.utils.loadFromUrlToImage
+import com.omarkarimli.movieapp.utils.visibleItem
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.editTextSearch.setOnClickListener {
+        binding.imageViewSearch.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToSearchFragment()
             findNavController().navigate(action)
         }
@@ -83,7 +83,11 @@ class HomeFragment : Fragment() {
         }
 
         genreAdapter.onItemClick = {
-            viewModel.fetchMoviesByGenre(it.id, viewModel.currentPage.value!!)
+            if (it.id == -1) {
+                viewModel.fetchMovies(viewModel.currentPage.value!!)
+            } else {
+                viewModel.fetchMoviesByGenre(it.id, viewModel.currentPage.value!!)
+            }
 
             genreAdapter.updateList(
                 viewModel.genres.value?.map { genre ->
@@ -124,22 +128,40 @@ class HomeFragment : Fragment() {
             }
         }
 
-        viewModel.movies.observe(viewLifecycleOwner) {
-            if (it != null) {
-                movieAdapter.updateList(it)
-                trendingAdapter.updateList(it.take(Constants.TRENDING_VALUE))
+        viewModel.movies.observe(viewLifecycleOwner) { movies ->
+            if (movies != null) {
+                movieAdapter.updateList(movies)
+                trendingAdapter.updateList(movies.take(Constants.TRENDING_VALUE))
+
+                // apply top movie
+                val topMovie = movies[0]
+                binding.imageViewMovie.loadFromUrlToImage(topMovie.posterPath)
+                binding.textViewTopMovie.text = topMovie.title
+                binding.buttonNavigate.setOnClickListener {
+                    val action = HomeFragmentDirections.actionHomeFragmentToMovieFragment(topMovie.id!!)
+                    findNavController().navigate(action)
+                }
+
+                binding.buttonMore.setOnClickListener {
+                    morePopupMenuHandler.showPopupMenu(it.context, it, topMovie)
+                }
             }
         }
 
         viewModel.currentPage.observe(viewLifecycleOwner) { page ->
+            val totalPages = viewModel.totalPages.value ?: 1 // Ensure it's at least 1
+
             binding.btnPrev.visibility = if (page > 1) View.VISIBLE else View.INVISIBLE
-            binding.btnNext.visibility = if (page < binding.tvTotalPageNumber.text.toString().toInt()) View.VISIBLE else View.INVISIBLE
+            binding.btnNext.visibility = if (page < totalPages) View.VISIBLE else View.INVISIBLE
 
             binding.tvPageNumber.text = "$page"
         }
 
         viewModel.totalPages.observe(viewLifecycleOwner) { totalPages ->
             binding.tvTotalPageNumber.text = "$totalPages"
+
+            binding.btnPrev.visibility = if (viewModel.currentPage.value!! > 1) View.VISIBLE else View.INVISIBLE
+            binding.btnNext.visibility = if (viewModel.currentPage.value!! < totalPages) View.VISIBLE else View.INVISIBLE
         }
 
         viewModel.genres.observe(viewLifecycleOwner) {

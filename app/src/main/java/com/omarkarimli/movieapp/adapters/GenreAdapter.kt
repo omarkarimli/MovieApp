@@ -35,8 +35,10 @@ class GenreAdapter : RecyclerView.Adapter<GenreAdapter.GenreViewHolder>() {
             textViewName.text = instance.name
 
             if (instance.isSelected) {
+                root.isEnabled = false
                 divider.visibleItem()
             } else {
+                root.isEnabled = true
                 divider.goneItem()
             }
 

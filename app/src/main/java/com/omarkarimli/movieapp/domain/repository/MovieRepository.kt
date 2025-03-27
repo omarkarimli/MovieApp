@@ -20,6 +20,7 @@ interface MovieRepository {
 
     suspend fun getMovieVideos(id: Int): List<MovieVideo>
 
+    suspend fun searchMovies(query: String, page: Int): MovieResponse
 
 
     suspend fun changePassword(email: String, currentPassword: String, newPassword: String)

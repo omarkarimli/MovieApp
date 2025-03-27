@@ -11,4 +11,15 @@
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
     <string name="share">Share</string>
+    <string name="next">Next</string>
+    <string name="remember_me">Remember me</string>
+    <string name="password">Password</string>
+    <string name="bio">Bio</string>
+    <string name="surname">Surname</string>
+    <string name="name">Name</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="email">Email</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
 </resources>
