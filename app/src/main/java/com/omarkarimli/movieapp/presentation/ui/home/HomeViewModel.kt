@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.omarkarimli.movieapp.domain.models.GenreModel
 import com.omarkarimli.movieapp.domain.models.Movie
 import com.omarkarimli.movieapp.domain.repository.MovieRepository
+import com.omarkarimli.movieapp.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,7 +51,7 @@ class HomeViewModel @Inject constructor(
             try {
                 val response = repo.fetchAllGenres()
 
-                val modifiedList = listOf(GenreModel(id = -1, name = "All", isSelected = true)) + response
+                val modifiedList = listOf(GenreModel(id = -1, name = Constants.ALL, isSelected = true)) + response
                 genres.value = modifiedList
 
                 Log.d("555", "${genres.value}")

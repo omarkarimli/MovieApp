@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 import com.omarkarimli.movieapp.data.source.local.Converters
 import com.omarkarimli.movieapp.utils.Constants
 
-@Entity(tableName = Constants.movie)
+@Entity(tableName = Constants.MOVIE)
 @TypeConverters(Converters::class)
 data class Movie(
     @PrimaryKey(autoGenerate = true)

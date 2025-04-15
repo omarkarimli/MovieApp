@@ -6,6 +6,7 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.omarkarimli.movieapp.BuildConfig
 import com.omarkarimli.movieapp.data.api.ApiService
 import com.omarkarimli.movieapp.domain.models.GenreModel
 import com.omarkarimli.movieapp.domain.models.Movie
@@ -24,11 +25,12 @@ class RemoteDataSourceImpl @Inject constructor(
     private val provideAuth: FirebaseAuth,
     private val provideFirestore: FirebaseFirestore,
 ) : RemoteDataSource {
+    val apiKey = BuildConfig.API_KEY
 
     override suspend fun getMovieById(id: Int): Movie {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.getMovieById(id, Constants.API_KEY).awaitResponse()
+                val response = apiService.getMovieById(id, apiKey).awaitResponse()
                 response.body() ?: throw Exception("Response body is null")
             } catch (e: Exception) {
                 throw Exception("getMovieById " + e.message.toString())
@@ -38,7 +40,7 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun searchMovies(query: String, page: Int): MovieResponse {
         return try {
-            val response = apiService.searchMovies(query, Constants.API_KEY, page)
+            val response = apiService.searchMovies(query, apiKey, page)
             response
         } catch (e: Exception) {
             throw Exception("Error in searchMovies: ${e.message}")
@@ -48,7 +50,7 @@ class RemoteDataSourceImpl @Inject constructor(
     override suspend fun fetchAllMovies(page: Int): MovieResponse {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.getMovies(Constants.API_KEY, page).awaitResponse()
+                val response = apiService.getMovies(apiKey, page).awaitResponse()
                 response.body() ?: throw Exception("Response body is null")
             } catch (e: Exception) {
                 throw Exception("fetchAllMovies " + e.message.toString())
@@ -59,7 +61,7 @@ class RemoteDataSourceImpl @Inject constructor(
     override suspend fun fetchMoviesByGenre(genreId: Int, page: Int): MovieResponse {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.getMoviesByGenre(Constants.API_KEY, genreId, page).awaitResponse()
+                val response = apiService.getMoviesByGenre(apiKey, genreId, page).awaitResponse()
                 response.body() ?: throw Exception("Response body is null")
             } catch (e: Exception) {
                 throw Exception("fetchMoviesByGenre " + e.message.toString())
@@ -70,7 +72,7 @@ class RemoteDataSourceImpl @Inject constructor(
     override suspend fun fetchAllGenres(): List<GenreModel> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.getGenres(Constants.API_KEY).awaitResponse()
+                val response = apiService.getGenres(apiKey).awaitResponse()
                 response.body()?.genres ?: emptyList()
             } catch (e: Exception) {
                 emptyList()
@@ -81,7 +83,7 @@ class RemoteDataSourceImpl @Inject constructor(
     override suspend fun getMovieVideos(id: Int): List<MovieVideo> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.getMovieVideos(id, Constants.API_KEY)
+                val response = apiService.getMovieVideos(id, apiKey)
                 response.results
             } catch (e: Exception) {
                 emptyList()
