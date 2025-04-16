@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".presentation.ui.movie.MovieFragment">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,12 +24,12 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="256dp">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/imageView_movie_copy"
                     android:layout_width="match_parent"
-                    android:layout_height="192dp"
+                    android:layout_height="match_parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
                 <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
                     android:id="@+id/youtube_player_view"
                     android:layout_width="match_parent"
-                    android:layout_height="192dp"
+                    android:layout_height="match_parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -109,6 +109,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/imageView_movie"
                     android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
                     android:layout_marginTop="64dp"
                     android:text="Title" />
 
@@ -134,7 +135,6 @@
                         android:layout_height="wrap_content"
                         style="@style/TextAppearance.Poppins.BodyMedium"
                         android:text="4.3" />
-
 
                     <TextView
                         android:id="@+id/textView_voteCount"
@@ -177,7 +177,6 @@
                         style="@style/TextAppearance.Poppins.BodyMedium"
                         android:text="26 march 2025" />
                 </LinearLayout>
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -196,8 +195,23 @@
                 android:layout_marginHorizontal="16dp"
                 style="@style/TextAppearance.Poppins.BodyLarge"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, noad."/>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_credits"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="24dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_credit" />
+
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/bottomAppBar"

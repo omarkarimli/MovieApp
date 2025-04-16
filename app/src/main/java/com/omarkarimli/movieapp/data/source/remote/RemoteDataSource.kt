@@ -1,6 +1,7 @@
 package com.omarkarimli.movieapp.data.source.remote
 
 import com.google.firebase.auth.AuthResult
+import com.omarkarimli.movieapp.domain.models.CreditResponse
 import com.omarkarimli.movieapp.domain.models.GenreModel
 import com.omarkarimli.movieapp.domain.models.Movie
 import com.omarkarimli.movieapp.domain.models.MovieResponse
@@ -21,6 +22,7 @@ interface RemoteDataSource {
 
     suspend fun searchMovies(query: String, page: Int): MovieResponse
 
+    suspend fun getMovieCredits(movieId: Int): CreditResponse
 
 
     suspend fun changePassword(email: String, currentPassword: String, newPassword: String)

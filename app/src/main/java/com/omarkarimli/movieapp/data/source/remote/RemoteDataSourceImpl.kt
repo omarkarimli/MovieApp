@@ -1,6 +1,5 @@
 package com.omarkarimli.movieapp.data.source.remote
 
-import android.util.Log
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -8,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.omarkarimli.movieapp.BuildConfig
 import com.omarkarimli.movieapp.data.api.ApiService
+import com.omarkarimli.movieapp.domain.models.CreditResponse
 import com.omarkarimli.movieapp.domain.models.GenreModel
 import com.omarkarimli.movieapp.domain.models.Movie
 import com.omarkarimli.movieapp.domain.models.MovieResponse
@@ -88,6 +88,14 @@ class RemoteDataSourceImpl @Inject constructor(
             } catch (e: Exception) {
                 emptyList()
             }
+        }
+    }
+
+    override suspend fun getMovieCredits(movieId: Int): CreditResponse {
+        return try {
+            apiService.getMovieCredits(movieId, apiKey)
+        } catch (e: Exception) {
+            throw Exception("getMovieCredits failed: ${e.message}")
         }
     }
 

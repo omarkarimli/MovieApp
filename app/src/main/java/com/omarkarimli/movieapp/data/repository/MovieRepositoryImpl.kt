@@ -25,6 +25,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun searchMovies(query: String, page: Int) = remoteDataSource.searchMovies(query, page)
 
+    override suspend fun getMovieCredits(movieId: Int) = remoteDataSource.getMovieCredits(movieId)
 
     override suspend fun changePassword(email: String, currentPassword: String, newPassword: String) = remoteDataSource.changePassword(email, currentPassword, newPassword)
 

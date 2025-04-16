@@ -1,5 +1,6 @@
 package com.omarkarimli.movieapp.domain.repository
 
+import com.omarkarimli.movieapp.domain.models.CreditResponse
 import com.omarkarimli.movieapp.domain.models.GenreModel
 import com.omarkarimli.movieapp.domain.models.Movie
 import com.omarkarimli.movieapp.domain.models.MovieResponse
@@ -21,6 +22,8 @@ interface MovieRepository {
     suspend fun getMovieVideos(id: Int): List<MovieVideo>
 
     suspend fun searchMovies(query: String, page: Int): MovieResponse
+
+    suspend fun getMovieCredits(movieId: Int): CreditResponse
 
 
     suspend fun changePassword(email: String, currentPassword: String, newPassword: String)

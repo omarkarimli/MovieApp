@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.MutableLiveData
+import com.omarkarimli.movieapp.domain.models.Cast
 import com.omarkarimli.movieapp.domain.models.Movie
 import com.omarkarimli.movieapp.domain.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +15,7 @@ import javax.inject.Inject
 class MovieViewModel @Inject constructor(
     private val repo: MovieRepository
 ) : ViewModel() {
+    val credits = MutableLiveData<List<Cast?>>()
 
     val videoKey = MutableLiveData<String?>()
     val movie = MutableLiveData<Movie>()
@@ -29,6 +31,7 @@ class MovieViewModel @Inject constructor(
                 movie.value = response
 
                 fetchMovieVideos(id)
+                getMovieCredits(id)
 
                 Log.e("555", "Movie Id: ${movie.value?.id}")
             } catch (e: Exception) {
@@ -59,6 +62,24 @@ class MovieViewModel @Inject constructor(
             } catch (e: Exception) {
                 Log.e("MovieViewModel", "Error fetching videos: ${e.message}")
                 videoKey.postValue(null)  // Prevent crashes
+            }
+        }
+    }
+
+    private fun getMovieCredits(id: Int) {
+        viewModelScope.launch {
+            loading.value = true
+            try {
+                val response = repo.getMovieCredits(id)
+                credits.value = response.cast ?: emptyList()
+
+                // Log
+                Log.e("555", "Credits: ${credits.value}")
+            } catch (e: Exception) {
+                Log.e("MovieViewModel", "Error: ${e.message}")
+                error.postValue("Failed to load credits")
+            } finally {
+                loading.value = false
             }
         }
     }

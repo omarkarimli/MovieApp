@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.omarkarimli.movieapp.adapters.CreditAdapter
 import com.omarkarimli.movieapp.databinding.FragmentMovieBinding
 import com.omarkarimli.movieapp.menu.MorePopupMenuHandler
 import com.omarkarimli.movieapp.utils.getFormattedDate
@@ -28,6 +29,8 @@ class MovieFragment : Fragment() {
 
     @Inject
     lateinit var morePopupMenuHandler: MorePopupMenuHandler
+
+    private val creditAdapter = CreditAdapter()
 
     private val viewModel by viewModels<MovieViewModel>()
     private var _binding: FragmentMovieBinding? = null
@@ -66,6 +69,8 @@ class MovieFragment : Fragment() {
             }
         }
 
+        binding.rvCredits.adapter = creditAdapter
+
         observeData()
     }
 
@@ -95,7 +100,24 @@ class MovieFragment : Fragment() {
                 textViewVoteCount.text = "(${it.voteCount} votes)"
 
                 textViewAdult.visibility = if (it.adult == true) View.VISIBLE else View.GONE
+
+//                viewModel.credits.value
+//                    ?.filterNotNull()
+//                    ?.takeIf { it.isNotEmpty() }
+//                    ?.let {
+//                        creditAdapter.updateList(it)
+//                        binding.rvCredits.visibleItem()
+//
+//                        Log.e("555", "rvCredits.visibility: " + rvCredits.visibility.toString())
+//                    } ?: binding.rvCredits.goneItem()
             }
+        }
+
+        viewModel.credits.observe(viewLifecycleOwner) { casts ->
+            casts?.filterNotNull()?.let {
+                creditAdapter.updateList(it)
+                binding.rvCredits.visibleItem()
+            } ?: binding.rvCredits.goneItem()
         }
 
         viewModel.videoKey.observe(viewLifecycleOwner) { key ->

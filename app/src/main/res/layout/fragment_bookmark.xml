@@ -9,8 +9,7 @@
     android:paddingHorizontal="16dp"
     android:paddingTop="32dp">
 
-    <TextView
-        android:visibility="gone"
+    <LinearLayout
         android:id="@+id/empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,8 +17,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="No Item found"
-        style="@style/TextAppearance.Poppins.BodyLarge" />
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:contentDescription="@string/empty"
+            android:src="@drawable/empty"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/no_item_found"
+            style="@style/TextAppearance.Poppins.BodyLarge" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/page_name"

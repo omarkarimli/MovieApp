@@ -1,5 +1,6 @@
 package com.omarkarimli.movieapp.data.api
 
+import com.omarkarimli.movieapp.domain.models.CreditResponse
 import com.omarkarimli.movieapp.domain.models.GenreResponse
 import com.omarkarimli.movieapp.domain.models.Movie
 import com.omarkarimli.movieapp.domain.models.MovieResponse
@@ -47,4 +48,10 @@ interface ApiService {
         @Path("movie_id") id: Int,
         @Query("api_key") apiKey: String
     ): MovieVideoResponse
+
+    @GET("movie/{movie_id}/credits")
+    suspend fun getMovieCredits(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String
+    ): CreditResponse
 }

@@ -28,8 +28,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="8dp"
         android:maxLines="1"
+        android:ellipsize="end"
         style="@style/TextAppearance.Poppins.TitleMedium"
-        android:text="Batman" />
+        android:text="Batmanaaaaa" />
 
     <Button
         style="?attr/materialIconButtonStyle"

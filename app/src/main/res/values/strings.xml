@@ -22,4 +22,6 @@
     <string name="email">Email</string>
     <string name="facebook">Facebook</string>
     <string name="google">Google</string>
+    <string name="empty">Empty</string>
+    <string name="no_item_found">No item found</string>
 </resources>
