@@ -8,10 +8,10 @@ import com.omarkarimli.movieapp.domain.repository.MovieRepository
 import com.omarkarimli.movieapp.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import androidx.core.content.edit
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val repo: MovieRepository,
     private val sharedPreferences: SharedPreferences,
     private val provideAuth: FirebaseAuth
 ): ViewModel() {
@@ -29,13 +29,13 @@ class SettingsViewModel @Inject constructor(
         isDarkMode.value = isChecked
 
         sharedPreferences
-            .edit()
-            .putBoolean(Constants.DARK_MODE, isChecked)
-            .apply()
+            .edit {
+                putBoolean(Constants.DARK_MODE, isChecked)
+            }
     }
 
     fun signOutAndRedirect() {
-        sharedPreferences.edit().clear().apply()
+        sharedPreferences.edit { clear() }
 
         provideAuth.signOut()
         error.value = "Signing out..."

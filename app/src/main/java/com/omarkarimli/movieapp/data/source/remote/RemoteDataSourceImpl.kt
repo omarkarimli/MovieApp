@@ -1,10 +1,5 @@
 package com.omarkarimli.movieapp.data.source.remote
 
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import com.omarkarimli.movieapp.BuildConfig
 import com.omarkarimli.movieapp.data.api.ApiService
 import com.omarkarimli.movieapp.domain.models.CreditResponse
@@ -12,20 +7,15 @@ import com.omarkarimli.movieapp.domain.models.GenreModel
 import com.omarkarimli.movieapp.domain.models.Movie
 import com.omarkarimli.movieapp.domain.models.MovieResponse
 import com.omarkarimli.movieapp.domain.models.MovieVideo
-import com.omarkarimli.movieapp.domain.models.UserData
-import com.omarkarimli.movieapp.utils.Constants
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import retrofit2.awaitResponse
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
-    private val apiService: ApiService,
-    private val provideAuth: FirebaseAuth,
-    private val provideFirestore: FirebaseFirestore,
+    private val apiService: ApiService
 ) : RemoteDataSource {
-    val apiKey = BuildConfig.API_KEY
+    private val apiKey = BuildConfig.API_KEY
 
     override suspend fun getMovieById(id: Int): Movie {
         return withContext(Dispatchers.IO) {
@@ -97,72 +87,5 @@ class RemoteDataSourceImpl @Inject constructor(
         } catch (e: Exception) {
             throw Exception("getMovieCredits failed: ${e.message}")
         }
-    }
-
-    override suspend fun changePassword(email: String, currentPassword: String, newPassword: String) {
-        val user = provideAuth.currentUser ?: FirebaseAuth.getInstance().currentUser
-        val credential = EmailAuthProvider.getCredential(email, currentPassword)
-
-        try {
-            if (user != null) {
-                user.reauthenticate(credential).await() // Re-authenticate user
-                user.updatePassword(newPassword).await() // Update password
-            } else {
-                throw Exception("User is not authenticated")
-            }
-        } catch (e: Exception) {
-            throw e // Handle exception appropriately
-        }
-    }
-
-    override suspend fun fetchUserData(): UserData? {
-        val uid = provideAuth.currentUser?.uid ?: "error"
-        val snapshot = provideFirestore
-            .collection(Constants.USERS)
-            .document(uid)
-            .get()
-            .await()
-
-        return snapshot.toObject(UserData::class.java)
-    }
-
-    override suspend fun loginUserAccount(isChecked: Boolean, email: String, password: String): AuthResult =
-        provideAuth
-            .signInWithEmailAndPassword(email, password)
-            .await()
-
-    override suspend fun registerNewUser(email: String, password: String): AuthResult =
-        provideAuth
-            .createUserWithEmailAndPassword(email, password)
-            .await()
-
-    override suspend fun addUserToFirestore(userData: UserData) {
-        val uid = provideAuth.currentUser?.uid ?: "error"
-        val userMap = mapOf(
-            Constants.NAME to userData.name,
-            Constants.SURNAME to userData.surname,
-            Constants.BIO to userData.bio,
-            Constants.WEBSITE to userData.website
-        )
-        provideFirestore
-            .collection(Constants.USERS)
-            .document(uid)
-            .set(userMap)
-            .await()
-    }
-
-    override suspend fun updateUserInFirestore(userData: UserData) {
-        val uid = provideAuth.currentUser?.uid ?: "error"
-        val userMap = mapOf(
-            Constants.NAME to userData.name,
-            Constants.SURNAME to userData.surname,
-            Constants.BIO to userData.bio,
-            Constants.WEBSITE to userData.website
-        )
-        provideFirestore
-            .collection(Constants.USERS)
-            .document(uid)
-            .set(userMap, SetOptions.merge())
-            .await()
     }
 }

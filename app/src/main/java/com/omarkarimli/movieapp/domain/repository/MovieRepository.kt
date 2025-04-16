@@ -5,7 +5,6 @@ import com.omarkarimli.movieapp.domain.models.GenreModel
 import com.omarkarimli.movieapp.domain.models.Movie
 import com.omarkarimli.movieapp.domain.models.MovieResponse
 import com.omarkarimli.movieapp.domain.models.MovieVideo
-import com.omarkarimli.movieapp.domain.models.UserData
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
@@ -24,11 +23,6 @@ interface MovieRepository {
     suspend fun searchMovies(query: String, page: Int): MovieResponse
 
     suspend fun getMovieCredits(movieId: Int): CreditResponse
-
-
-    suspend fun changePassword(email: String, currentPassword: String, newPassword: String)
-
-    suspend fun fetchUserData(): UserData?
 
     // Local
     suspend fun getAllMoviesLocally(): Flow<List<Movie>>

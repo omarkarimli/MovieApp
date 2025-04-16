@@ -12,4 +12,8 @@ interface AuthRepository {
     suspend fun addUserToFirestore(userData: UserData)
 
     suspend fun updateUserInFirestore(userData: UserData)
+
+    suspend fun changePassword(email: String, currentPassword: String, newPassword: String)
+
+    suspend fun fetchUserData(): UserData?
 }

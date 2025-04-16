@@ -1,12 +1,10 @@
 package com.omarkarimli.movieapp.data.source.remote
 
-import com.google.firebase.auth.AuthResult
 import com.omarkarimli.movieapp.domain.models.CreditResponse
 import com.omarkarimli.movieapp.domain.models.GenreModel
 import com.omarkarimli.movieapp.domain.models.Movie
 import com.omarkarimli.movieapp.domain.models.MovieResponse
 import com.omarkarimli.movieapp.domain.models.MovieVideo
-import com.omarkarimli.movieapp.domain.models.UserData
 
 interface RemoteDataSource {
 
@@ -23,17 +21,4 @@ interface RemoteDataSource {
     suspend fun searchMovies(query: String, page: Int): MovieResponse
 
     suspend fun getMovieCredits(movieId: Int): CreditResponse
-
-
-    suspend fun changePassword(email: String, currentPassword: String, newPassword: String)
-
-    suspend fun fetchUserData(): UserData?
-
-    suspend fun loginUserAccount(isChecked: Boolean, email: String, password: String): AuthResult
-
-    suspend fun registerNewUser(email: String, password: String): AuthResult
-
-    suspend fun addUserToFirestore(userData: UserData)
-
-    suspend fun updateUserInFirestore(userData: UserData)
 }

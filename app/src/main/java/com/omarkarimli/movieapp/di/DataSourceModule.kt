@@ -27,10 +27,4 @@ abstract class DataSourceModule {
     abstract fun bindLocalDataSource(
         localDataSourceImpl: LocalDataSourceImpl
     ): LocalDataSource
-
-    @Binds
-    @Singleton
-    abstract fun bindAuthRepository(
-        authRepositoryImpl: AuthRepositoryImpl
-    ): AuthRepository
 }

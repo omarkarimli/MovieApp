@@ -5,14 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.omarkarimli.movieapp.domain.models.UserData
-import com.omarkarimli.movieapp.domain.repository.MovieRepository
+import com.omarkarimli.movieapp.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val repo: MovieRepository
+    private val repo: AuthRepository
 ) : ViewModel() {
 
     val userData = MutableLiveData<UserData?>()

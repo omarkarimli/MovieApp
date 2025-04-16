@@ -12,7 +12,6 @@ class MovieRepositoryImpl @Inject constructor(
 ) : MovieRepository {
 
     // Remote
-
     override suspend fun getMovieById(id: Int) = remoteDataSource.getMovieById(id)
 
     override suspend fun fetchAllMovies(page: Int) = remoteDataSource.fetchAllMovies(page)
@@ -26,10 +25,6 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun searchMovies(query: String, page: Int) = remoteDataSource.searchMovies(query, page)
 
     override suspend fun getMovieCredits(movieId: Int) = remoteDataSource.getMovieCredits(movieId)
-
-    override suspend fun changePassword(email: String, currentPassword: String, newPassword: String) = remoteDataSource.changePassword(email, currentPassword, newPassword)
-
-    override suspend fun fetchUserData() = remoteDataSource.fetchUserData()
 
     // Local
     override suspend fun getAllMoviesLocally() = localDataSource.getAllMoviesLocally()

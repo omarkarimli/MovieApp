@@ -1,6 +1,8 @@
 package com.omarkarimli.movieapp.di
 
+import com.omarkarimli.movieapp.data.repository.AuthRepositoryImpl
 import com.omarkarimli.movieapp.data.repository.MovieRepositoryImpl
+import com.omarkarimli.movieapp.domain.repository.AuthRepository
 import com.omarkarimli.movieapp.domain.repository.MovieRepository
 import dagger.Binds
 import dagger.Module
@@ -17,4 +19,10 @@ abstract class RepositoryModule {
     abstract fun bindRepositoryModule(
         repositoryImpl: MovieRepositoryImpl
     ): MovieRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepositoryModule(
+        repositoryImpl: AuthRepositoryImpl
+    ): AuthRepository
 }
