@@ -4,12 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.omarkarimli.movieapp.databinding.ItemTrendingBinding
 import com.omarkarimli.movieapp.domain.models.Movie
+import com.omarkarimli.movieapp.utils.diffUtils.MovieDiffCallback
 import com.omarkarimli.movieapp.utils.loadFromUrlToImage
 
-class TrendingAdapter : RecyclerView.Adapter<TrendingAdapter.TrendingViewHolder>() {
+class TrendingAdapter : ListAdapter<Movie, TrendingAdapter.TrendingViewHolder>(MovieDiffCallback()) {
 
     lateinit var onMoreClick: (context: Context, anchoredView: View, movie: Movie) -> Unit
     lateinit var onItemClick: (movie: Movie) -> Unit
@@ -46,6 +48,6 @@ class TrendingAdapter : RecyclerView.Adapter<TrendingAdapter.TrendingViewHolder>
     fun updateList(newList: List<Movie>) {
         originalList.clear()
         originalList.addAll(newList)
-        notifyDataSetChanged()
+        submitList(newList)
     }
 }

@@ -1,12 +1,16 @@
 package com.omarkarimli.movieapp.utils
 
-import android.text.format.DateUtils
+import android.content.Context
+import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import com.omarkarimli.movieapp.R
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.Locale
+import android.animation.Animator
 
 fun View.visibleItem() {
     this.visibility = View.VISIBLE
@@ -34,4 +38,11 @@ fun String.getFormattedDate(): String {
     } catch (e: Exception) {
         "Unknown"
     }
+}
+
+@ColorInt
+fun Context.getThemeColor(@AttrRes attrResId: Int): Int {
+    val typedValue = TypedValue()
+    theme.resolveAttribute(attrResId, typedValue, true)
+    return typedValue.data
 }

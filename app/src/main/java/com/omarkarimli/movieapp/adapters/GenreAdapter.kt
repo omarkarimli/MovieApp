@@ -2,13 +2,14 @@ package com.omarkarimli.movieapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.omarkarimli.movieapp.databinding.ItemGenreBinding
 import com.omarkarimli.movieapp.domain.models.GenreModel
-import com.omarkarimli.movieapp.utils.goneItem
-import com.omarkarimli.movieapp.utils.visibleItem
+import com.omarkarimli.movieapp.utils.diffUtils.GenreDiffCallback
+import com.omarkarimli.movieapp.utils.getThemeColor
 
-class GenreAdapter : RecyclerView.Adapter<GenreAdapter.GenreViewHolder>() {
+class GenreAdapter : ListAdapter<GenreModel, GenreAdapter.GenreViewHolder>(GenreDiffCallback()) {
 
     lateinit var onItemClick: (GenreModel) -> Unit
 
@@ -32,14 +33,20 @@ class GenreAdapter : RecyclerView.Adapter<GenreAdapter.GenreViewHolder>() {
         val instance = originalList[position]
 
         holder.binding.apply {
-            textViewName.text = instance.name
+            val context = root.context
+
+            root.text = instance.name
 
             if (instance.isSelected) {
                 root.isEnabled = false
-                divider.visibleItem()
+
+                root.setBackgroundColor(context.getThemeColor(com.google.android.material.R.attr.colorPrimary))
+                root.setTextColor(context.getThemeColor(com.google.android.material.R.attr.colorOnPrimary))
             } else {
                 root.isEnabled = true
-                divider.goneItem()
+
+                root.setBackgroundColor(context.getThemeColor(com.google.android.material.R.attr.colorSurface))
+                root.setTextColor(context.getThemeColor(com.google.android.material.R.attr.colorOnSurface))
             }
 
             root.setOnClickListener { onItemClick(instance) }
@@ -49,6 +56,6 @@ class GenreAdapter : RecyclerView.Adapter<GenreAdapter.GenreViewHolder>() {
     fun updateList(newList: List<GenreModel>) {
         originalList.clear()
         originalList.addAll(newList)
-        notifyDataSetChanged()
+        submitList(newList)
     }
 }

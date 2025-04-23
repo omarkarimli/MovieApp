@@ -4,33 +4,35 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.omarkarimli.movieapp.databinding.ItemMovieBinding
 import com.omarkarimli.movieapp.domain.models.Movie
+import com.omarkarimli.movieapp.utils.diffUtils.MovieDiffCallback
 import com.omarkarimli.movieapp.utils.loadFromUrlToImage
 
-class MovieAdapter : RecyclerView.Adapter<MovieAdapter.ArticleViewHolder>() {
+class MovieAdapter : ListAdapter<Movie, MovieAdapter.MovieViewHolder>(MovieDiffCallback()) {
 
     lateinit var onMoreClick: (context: Context, anchoredView: View, movie: Movie) -> Unit
     lateinit var onItemClick: (movie: Movie) -> Unit
 
     private var originalList = arrayListOf<Movie>()
 
-    inner class ArticleViewHolder(val binding: ItemMovieBinding) :
+    inner class MovieViewHolder(val binding: ItemMovieBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val layout = ItemMovieBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return ArticleViewHolder(layout)
+        return MovieViewHolder(layout)
     }
 
     override fun getItemCount(): Int {
         return originalList.size
     }
 
-    override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val instance = originalList[position]
 
         holder.binding.apply {
@@ -46,6 +48,6 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.ArticleViewHolder>() {
     fun updateList(newList: List<Movie>) {
         originalList.clear()
         originalList.addAll(newList)
-        notifyDataSetChanged()
+        submitList(newList)
     }
 }

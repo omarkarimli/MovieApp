@@ -1,26 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.google.android.material.button.MaterialButton
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:backgroundTint="?colorPrimary"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/textView_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        style="@style/TextAppearance.Poppins.BodyMedium"
-        android:textColor="?colorOnBackground"
-        android:text="All" />
-
-    <com.google.android.material.divider.MaterialDivider
-        android:visibility="gone"
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:dividerColor="?colorPrimary"
-        app:dividerThickness="3dp"/>
-
-</LinearLayout>
+    android:text="All" />

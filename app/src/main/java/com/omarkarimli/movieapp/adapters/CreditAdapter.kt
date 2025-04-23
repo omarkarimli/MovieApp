@@ -2,12 +2,14 @@ package com.omarkarimli.movieapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.omarkarimli.movieapp.databinding.ItemCreditBinding
 import com.omarkarimli.movieapp.domain.models.Cast
+import com.omarkarimli.movieapp.utils.diffUtils.CastDiffCallback
 import com.omarkarimli.movieapp.utils.loadFromUrlToImage
 
-class CreditAdapter: RecyclerView.Adapter<CreditAdapter.CreditViewHolder>() {
+class CreditAdapter: ListAdapter<Cast, CreditAdapter.CreditViewHolder>(CastDiffCallback()) {
     private val originalList = mutableListOf<Cast?>()
 
     inner class CreditViewHolder(val binding: ItemCreditBinding): RecyclerView.ViewHolder(binding.root)
@@ -33,6 +35,6 @@ class CreditAdapter: RecyclerView.Adapter<CreditAdapter.CreditViewHolder>() {
     fun updateList(newList: List<Cast>) {
         originalList.clear()
         originalList.addAll(newList)
-        notifyDataSetChanged()
+        submitList(newList)
     }
 }
