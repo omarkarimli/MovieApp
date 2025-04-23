@@ -10,7 +10,6 @@ import com.omarkarimli.movieapp.R
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.Locale
-import android.animation.Animator
 
 fun View.visibleItem() {
     this.visibility = View.VISIBLE
