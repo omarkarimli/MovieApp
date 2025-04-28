@@ -16,8 +16,6 @@ class MovieAdapter : ListAdapter<Movie, MovieAdapter.MovieViewHolder>(MovieDiffC
     lateinit var onMoreClick: (context: Context, anchoredView: View, movie: Movie) -> Unit
     lateinit var onItemClick: (movie: Movie) -> Unit
 
-    private var originalList = arrayListOf<Movie>()
-
     inner class MovieViewHolder(val binding: ItemMovieBinding) :
         RecyclerView.ViewHolder(binding.root)
 
@@ -28,26 +26,19 @@ class MovieAdapter : ListAdapter<Movie, MovieAdapter.MovieViewHolder>(MovieDiffC
         return MovieViewHolder(layout)
     }
 
-    override fun getItemCount(): Int {
-        return originalList.size
-    }
-
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val instance = originalList[position]
+        val movie = getItem(position)
 
         holder.binding.apply {
-            imageViewMovie.loadFromUrlToImage(instance.posterPath)
-            textViewTitle.text = instance.title
+            imageViewMovie.loadFromUrlToImage(movie.posterPath)
+            textViewTitle.text = movie.title
 
-            buttonMore.setOnClickListener { onMoreClick(it.context, it, instance) }
-
-            root.setOnClickListener { onItemClick(instance) }
+            buttonMore.setOnClickListener { onMoreClick(it.context, it, movie) }
+            root.setOnClickListener { onItemClick(movie) }
         }
     }
 
     fun updateList(newList: List<Movie>) {
-        originalList.clear()
-        originalList.addAll(newList)
         submitList(newList)
     }
 }
