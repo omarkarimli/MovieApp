@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.omarkarimli.movieapp.adapters.GenreAdapter
 import com.omarkarimli.movieapp.adapters.MovieAdapter
@@ -18,6 +19,7 @@ import com.omarkarimli.movieapp.utils.goneItem
 import com.omarkarimli.movieapp.utils.loadFromUrlToImage
 import com.omarkarimli.movieapp.utils.visibleItem
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -48,124 +50,149 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        viewModel.fetchMovies(viewModel.currentPage.value ?: 1)
-        viewModel.fetchGenres()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupAdapters()
+        setupListeners()
+        observeData()
+
+        // Initial data load
+        viewModel.fetchMovies()
+        viewModel.fetchGenres()
+    }
+
+    private fun setupAdapters() {
+        binding.rvTrending.adapter = trendingAdapter
+        binding.rvGenres.adapter = genreAdapter
+        binding.rvMovies.adapter = movieAdapter
+    }
+
+    private fun setupListeners() {
         binding.imageViewSearch.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToSearchFragment()
             findNavController().navigate(action)
         }
 
-        trendingAdapter.onMoreClick = { context, anchoredView, movie ->
-            morePopupMenuHandler.showPopupMenu(context, anchoredView, movie)
-        }
-        movieAdapter.onMoreClick = { context, anchoredView, article ->
-            morePopupMenuHandler.showPopupMenu(context, anchoredView, article)
-        }
-        movieAdapter.onItemClick = {
-            if (it.id != null) {
-                val action = HomeFragmentDirections.actionHomeFragmentToMovieFragment(it.id)
-                findNavController().navigate(action)
-            }
-        }
-        trendingAdapter.onItemClick = {
-            if (it.id != null) {
-                val action = HomeFragmentDirections.actionHomeFragmentToMovieFragment(it.id)
-                findNavController().navigate(action)
-            }
-        }
-
-        genreAdapter.onItemClick = {
-            if (it.id == -1) {
-                viewModel.fetchMovies(viewModel.currentPage.value!!)
-            } else {
-                viewModel.fetchMoviesByGenre(it.id, viewModel.currentPage.value!!)
-            }
-
-            genreAdapter.updateList(
-                viewModel.genres.value?.map { genre ->
-                    genre.copy(isSelected = genre.id == it.id)
-                } ?: emptyList()
-            )
-        }
-
-        binding.rvTrending.adapter = trendingAdapter
-        binding.rvGenres.adapter = genreAdapter
-        binding.rvMovies.adapter = movieAdapter
-
         binding.btnNext.setOnClickListener {
-            viewModel.changePage(true) // Move to next page
+            viewModel.changePage(true)
         }
 
         binding.btnPrev.setOnClickListener {
-            viewModel.changePage(false) // Move to previous page
+            viewModel.changePage(false)
         }
 
-        observeData()
+        genreAdapter.onItemClick = { genre ->
+            if (genre.id == -1) {
+                viewModel.fetchMovies()
+            } else {
+                viewModel.fetchMoviesByGenre(genre.id)
+            }
+
+            genreAdapter.updateList(
+                viewModel.genres.value.map {
+                    it.copy(isSelected = it.id == genre.id)
+                }
+            )
+        }
+
+        movieAdapter.onMoreClick = { context, anchor, movie ->
+            morePopupMenuHandler.showPopupMenu(context, anchor, movie)
+        }
+
+        trendingAdapter.onMoreClick = { context, anchor, movie ->
+            morePopupMenuHandler.showPopupMenu(context, anchor, movie)
+        }
+
+        movieAdapter.onItemClick = { movie ->
+            movie.id?.let {
+                val action = HomeFragmentDirections.actionHomeFragmentToMovieFragment(it)
+                findNavController().navigate(action)
+            }
+        }
+
+        trendingAdapter.onItemClick = { movie ->
+            movie.id?.let {
+                val action = HomeFragmentDirections.actionHomeFragmentToMovieFragment(it)
+                findNavController().navigate(action)
+            }
+        }
     }
 
     private fun observeData() {
-        viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
-            binding.progressBar.apply {
-                if (isLoading) visibleItem() else goneItem()
-            }
+        viewLifecycleOwner.lifecycleScope.launch {
+            launch {
+                viewModel.loading.collect { isLoading ->
+                    binding.progressBar.apply {
+                        if (isLoading) visibleItem() else goneItem()
+                    }
 
-            binding.layoutPagination.apply {
-                if (isLoading) goneItem() else visibleItem()
-            }
-        }
-
-        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
-            if (!errorMessage.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
-            }
-        }
-
-        viewModel.movies.observe(viewLifecycleOwner) { movies ->
-            if (movies != null) {
-                movieAdapter.updateList(movies)
-                trendingAdapter.updateList(movies.take(Constants.TRENDING_VALUE))
-
-                // apply top movie
-                val topMovie = movies[0]
-                binding.imageViewMovie.loadFromUrlToImage(topMovie.posterPath)
-                binding.textViewTopMovie.text = topMovie.title
-                binding.buttonNavigate.setOnClickListener {
-                    val action = HomeFragmentDirections.actionHomeFragmentToMovieFragment(topMovie.id!!)
-                    findNavController().navigate(action)
-                }
-
-                binding.buttonMore.setOnClickListener {
-                    morePopupMenuHandler.showPopupMenu(it.context, it, topMovie)
+                    binding.layoutPagination.apply {
+                        if (isLoading) goneItem() else visibleItem()
+                    }
                 }
             }
+
+            launch {
+                viewModel.error.collect { errorMessage ->
+                    if (!errorMessage.isNullOrEmpty()) {
+                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+            launch {
+                viewModel.movies.collect { movies ->
+                    if (!movies.isNullOrEmpty()) {
+                        movieAdapter.updateList(movies)
+                        trendingAdapter.updateList(movies.take(Constants.TRENDING_VALUE))
+                        updateTopMovieSection(movies.first())
+                    } else {
+                        clearTopMovieSection()
+                    }
+                }
+            }
+
+            launch {
+                viewModel.currentPage.collect { page ->
+                    binding.tvPageNumber.text = "$page"
+                    binding.btnPrev.visibility = if (page > 1) View.VISIBLE else View.INVISIBLE
+                }
+            }
+
+            launch {
+                viewModel.totalPages.collect { totalPages ->
+                    binding.tvTotalPageNumber.text = "$totalPages"
+                    binding.btnNext.visibility = if (viewModel.currentPage.value < totalPages) View.VISIBLE else View.INVISIBLE
+                }
+            }
+
+            launch {
+                viewModel.genres.collect { genreList ->
+                    genreAdapter.updateList(genreList)
+                }
+            }
+        }
+    }
+
+    private fun updateTopMovieSection(movie: com.omarkarimli.movieapp.domain.models.Movie) {
+        binding.imageViewMovie.loadFromUrlToImage(movie.posterPath)
+        binding.textViewTopMovie.text = movie.title
+
+        binding.buttonNavigate.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToMovieFragment(movie.id!!)
+            findNavController().navigate(action)
         }
 
-        viewModel.currentPage.observe(viewLifecycleOwner) { page ->
-            val totalPages = viewModel.totalPages.value ?: 1 // Ensure it's at least 1
-
-            binding.btnPrev.visibility = if (page > 1) View.VISIBLE else View.INVISIBLE
-            binding.btnNext.visibility = if (page < totalPages) View.VISIBLE else View.INVISIBLE
-
-            binding.tvPageNumber.text = "$page"
+        binding.buttonMore.setOnClickListener {
+            morePopupMenuHandler.showPopupMenu(it.context, it, movie)
         }
+    }
 
-        viewModel.totalPages.observe(viewLifecycleOwner) { totalPages ->
-            binding.tvTotalPageNumber.text = "$totalPages"
-
-            binding.btnPrev.visibility = if (viewModel.currentPage.value!! > 1) View.VISIBLE else View.INVISIBLE
-            binding.btnNext.visibility = if (viewModel.currentPage.value!! < totalPages) View.VISIBLE else View.INVISIBLE
-        }
-
-        viewModel.genres.observe(viewLifecycleOwner) {
-            genreAdapter.updateList(it)
-        }
+    private fun clearTopMovieSection() {
+        binding.imageViewMovie.setImageDrawable(null)
+        binding.textViewTopMovie.text = ""
+        binding.buttonNavigate.setOnClickListener(null)
+        binding.buttonMore.setOnClickListener(null)
     }
 }

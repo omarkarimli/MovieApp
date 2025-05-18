@@ -2,6 +2,7 @@ package com.omarkarimli.movieapp.menu
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
@@ -22,21 +23,31 @@ class MorePopupMenuHandler @Inject constructor(
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    fun showPopupMenu(context: Context, anchoredView: View, movie: Movie) {
+    fun showPopupMenu(
+        context: Context,
+        anchoredView: View,
+        movie: Movie,
+    ) {
         val popupMenu = PopupMenu(context, anchoredView)
         popupMenu.menuInflater.inflate(R.menu.more_popup_menu, popupMenu.menu)
 
         coroutineScope.launch {
-            val isBookmarked = movie.id?.let { localDataSource.getMovieByIdLocally(it) } != null
+            val isBookmarked = try {
+                val result = movie.id?.let { localDataSource.getMovieByIdLocally(it) }
+                result != null
+            } catch (e: Exception) {
+                Log.e("MorePopupMenuHandler", "Error checking bookmark status", e)
+                false
+            }
 
             withContext(Dispatchers.Main) {
                 popupMenu.menu.findItem(R.id.action_bookmark).title =
                     if (isBookmarked) "Unbookmark" else "Bookmark"
 
                 popupMenu.setOnMenuItemClickListener { item ->
-                    val result = handleMenuClick(context, item, movie, isBookmarked)
-                    result
+                    handleMenuClick(context, item, movie, isBookmarked)
                 }
+
                 popupMenu.show()
             }
         }
@@ -54,7 +65,7 @@ class MorePopupMenuHandler @Inject constructor(
                 true
             }
             R.id.action_share -> {
-                shareArticle(context, movie)
+                shareMovie(context, movie)
                 true
             }
             else -> false
@@ -67,19 +78,34 @@ class MorePopupMenuHandler @Inject constructor(
         isBookmarked: Boolean
     ) {
         coroutineScope.launch {
-            if (isBookmarked) {
-                localDataSource.deleteMovieLocally(movie)
-                Toast.makeText(context, "Unbookmarked!", Toast.LENGTH_SHORT).show()
-            } else {
-                localDataSource.addMovieLocally(movie)
-                Toast.makeText(context, "Bookmarked!", Toast.LENGTH_SHORT).show()
+            try {
+                if (isBookmarked) {
+                    movie.id?.let {
+                        localDataSource.deleteMovieByIdLocally(it)
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(context, "Unbookmarked!", Toast.LENGTH_SHORT).show()
+                        }
+                    } ?: run {
+                        Log.e("MorePopupMenuHandler", "Movie ID is null while unbookmarking")
+                    }
+                } else {
+                    localDataSource.addMovieLocally(movie)
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Bookmarked!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("MorePopupMenuHandler", "Bookmark toggle failed", e)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "An error occurred while toggling bookmark", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
-    private fun shareArticle(context: Context, movie: Movie) {
+    private fun shareMovie(context: Context, movie: Movie) {
         val shareIntent = Intent(Intent.ACTION_SEND).apply {
-            putExtra(Intent.EXTRA_TEXT, "Check this Movie\n${movie.title}")
+            putExtra(Intent.EXTRA_TEXT, "Check out this movie: ${movie.title}")
             type = "text/plain"
         }
         context.startActivity(Intent.createChooser(shareIntent, "Share via"))

@@ -9,6 +9,8 @@ interface LocalDataSource {
 
     suspend fun deleteMovieLocally(movie: Movie)
 
+    suspend fun deleteMovieByIdLocally(id: Int)
+
     suspend fun getMovieByIdLocally(id: Int): Movie?
 
     suspend fun addMovieLocally(movie: Movie)

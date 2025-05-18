@@ -11,6 +11,8 @@ class LocalDataSourceImpl @Inject constructor(
 
     override suspend fun deleteMovieLocally(movie: Movie) = movieDao.delete(movie)
 
+    override suspend fun deleteMovieByIdLocally(id: Int) = movieDao.deleteById(id)
+
     override suspend fun getMovieByIdLocally(id: Int) = movieDao.getMovieById(id)
 
     override suspend fun addMovieLocally(movie: Movie) = movieDao.addMovie(movie)
