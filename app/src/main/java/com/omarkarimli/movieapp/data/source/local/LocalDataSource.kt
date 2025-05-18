@@ -7,8 +7,6 @@ interface LocalDataSource {
 
     suspend fun getAllMoviesLocally(): Flow<List<Movie>>
 
-    suspend fun deleteMovieLocally(movie: Movie)
-
     suspend fun deleteMovieByIdLocally(id: Int)
 
     suspend fun getMovieByIdLocally(id: Int): Movie?
