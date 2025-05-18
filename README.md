@@ -34,14 +34,12 @@ MVVM (Model View ViewModel) Architecture Pattern in Android
 
 ### 📷 Screens
 
-<img src="https://github.com/user-attachments/assets/839baffb-7d6e-48dd-b0d2-be1f6d094be9" alt="onboarding" height="256" style="margin: 24px;">
-<img src="https://github.com/user-attachments/assets/cc8471dc-f528-4160-b696-dac2d16c845e" alt="home" height="256" style="margin: 24px;">
-<img src="https://github.com/user-attachments/assets/bdd89ef9-eb6d-4ebe-8066-4b33f5795f93" alt="explore" height="256" style="margin: 24px;">
-<img src="https://github.com/user-attachments/assets/4f22b0e0-a3e8-41ce-af0e-dedd58c7639d" alt="edit profile" height="256" style="margin: 24px;">
-<img src="https://github.com/user-attachments/assets/e70bb430-5c62-47c6-a3ab-1375abe14368" alt="bookmark" height="256" style="margin: 24px;">
-<img src="https://github.com/user-attachments/assets/a01dcf02-c4c3-4807-adf5-ccd261434027" alt="article" height="256" style="margin: 24px;">
-<img src="https://github.com/user-attachments/assets/c47ca636-d991-44fa-a481-9e7ad3ffb088" alt="signup" height="256" style="margin: 24px;">
-<img src="https://github.com/user-attachments/assets/6506f135-18eb-4ed4-a39a-df8b6ff0efd0" alt="settings" height="256" style="margin: 24px;">
-<img src="https://github.com/user-attachments/assets/a78b802b-e71e-4a36-a8b4-bd0c17f32167" alt="search" height="256" style="margin: 24px;">
-<img src="https://github.com/user-attachments/assets/fa376e00-1351-4ce7-9790-39a0aafea430" alt="login" height="256" style="margin: 24px;">
+![Screenshot_movie](https://github.com/user-attachments/assets/c1e207d3-1577-4a18-b1eb-b7e71196b4be)
+![Screenshot_login](https://github.com/user-attachments/assets/ffdc4753-7330-467e-a50f-d02ff657b9b0)
+![Screenshot_home](https://github.com/user-attachments/assets/ab3fa355-4079-457c-a1fc-b41354af2042)
+![Screenshot_bookmark](https://github.com/user-attachments/assets/ac37047f-628c-48e8-9a48-b5d71dbe6d72)
+![Screenshot_signup](https://github.com/user-attachments/assets/6f4fd4aa-af2b-4375-8eed-ae18b9f9374b)
+![Screenshot_settings](https://github.com/user-attachments/assets/f6b2e474-8dd0-4516-81aa-977d90946c52)
+![Screenshot_profile](https://github.com/user-attachments/assets/1aabc4ca-c15c-4be7-b454-81217b641731)
+![Screenshot_onboarding](https://github.com/user-attachments/assets/6b30849e-0664-49f7-9906-a36d7ad3a517)
 
