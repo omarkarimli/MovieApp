@@ -43,7 +43,7 @@ class LoginViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.e("LoginViewModel", "Error: ${e.message}")
-                error.postValue("Error: ${e.message}")
+                error.postValue("Login failed. Please try again.")
             } finally {
                 loading.postValue(false)
             }

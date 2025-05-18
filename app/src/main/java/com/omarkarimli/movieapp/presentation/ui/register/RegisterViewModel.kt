@@ -1,5 +1,6 @@
 package com.omarkarimli.movieapp.presentation.ui.register
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -33,7 +34,8 @@ class RegisterViewModel @Inject constructor(
                 isNavigating.postValue(true)
                 success.postValue("Registered successfully")
             } catch (e: Exception) {
-                error.postValue("Error: ${e.localizedMessage}")
+                Log.e("RegisterViewModel", "Error: ${e.localizedMessage}")
+                error.postValue("Registration failed. Please try again.")
             } finally {
                 loading.postValue(false)
             }

@@ -1,11 +1,9 @@
 package com.omarkarimli.movieapp.di
 
-import com.omarkarimli.movieapp.data.repository.AuthRepositoryImpl
 import com.omarkarimli.movieapp.data.source.local.LocalDataSource
 import com.omarkarimli.movieapp.data.source.local.LocalDataSourceImpl
 import com.omarkarimli.movieapp.data.source.remote.RemoteDataSource
 import com.omarkarimli.movieapp.data.source.remote.RemoteDataSourceImpl
-import com.omarkarimli.movieapp.domain.repository.AuthRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
