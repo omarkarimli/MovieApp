@@ -16,6 +16,10 @@ class AuthRepositoryImpl @Inject constructor(
     private val provideFirestore: FirebaseFirestore
 ): AuthRepository {
 
+    override suspend fun signOut() {
+        provideAuth.signOut()
+    }
+
     override suspend fun loginUserAccount(isChecked: Boolean, email: String, password: String): AuthResult =
         provideAuth
             .signInWithEmailAndPassword(email, password)

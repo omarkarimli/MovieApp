@@ -5,6 +5,8 @@ import com.omarkarimli.movieapp.domain.models.UserData
 
 interface AuthRepository {
 
+    suspend fun signOut()
+
     suspend fun loginUserAccount(isChecked: Boolean, email: String, password: String): AuthResult
 
     suspend fun registerNewUser(email: String, password: String): AuthResult

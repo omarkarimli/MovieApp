@@ -1,6 +1,6 @@
 package com.omarkarimli.movieapp.di
 
-import com.omarkarimli.movieapp.data.source.local.LocalDataSourceImpl
+import com.omarkarimli.movieapp.domain.repository.MovieRepository
 import com.omarkarimli.movieapp.menu.MorePopupMenuHandler
 import dagger.Module
 import dagger.Provides
@@ -14,5 +14,5 @@ object PopupMenuHandlerModule {
 
     @Singleton
     @Provides
-    fun provideMorePopupMenuHandler(localDataSource: LocalDataSourceImpl) = MorePopupMenuHandler(localDataSource)
+    fun provideMorePopupMenuHandler(repo: MovieRepository) = MorePopupMenuHandler(repo)
 }

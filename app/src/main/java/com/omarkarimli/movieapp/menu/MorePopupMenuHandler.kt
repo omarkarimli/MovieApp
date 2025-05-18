@@ -8,8 +8,8 @@ import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
 import com.omarkarimli.movieapp.R
-import com.omarkarimli.movieapp.data.source.local.LocalDataSourceImpl
 import com.omarkarimli.movieapp.domain.models.Movie
+import com.omarkarimli.movieapp.domain.repository.MovieRepository
 import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @ActivityScoped
 class MorePopupMenuHandler @Inject constructor(
-    private val localDataSource: LocalDataSourceImpl
+    private val repo: MovieRepository
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
@@ -33,7 +33,7 @@ class MorePopupMenuHandler @Inject constructor(
 
         coroutineScope.launch {
             val isBookmarked = try {
-                val result = movie.id?.let { localDataSource.getMovieByIdLocally(it) }
+                val result = movie.id?.let { repo.getMovieByIdLocally(it) }
                 result != null
             } catch (e: Exception) {
                 Log.e("MorePopupMenuHandler", "Error checking bookmark status", e)
@@ -81,7 +81,7 @@ class MorePopupMenuHandler @Inject constructor(
             try {
                 if (isBookmarked) {
                     movie.id?.let {
-                        localDataSource.deleteMovieByIdLocally(it)
+                        repo.deleteMovieByIdLocally(it)
                         withContext(Dispatchers.Main) {
                             Toast.makeText(context, "Unbookmarked!", Toast.LENGTH_SHORT).show()
                         }
@@ -89,7 +89,7 @@ class MorePopupMenuHandler @Inject constructor(
                         Log.e("MorePopupMenuHandler", "Movie ID is null while unbookmarking")
                     }
                 } else {
-                    localDataSource.addMovieLocally(movie)
+                    repo.addMovieLocally(movie)
                     withContext(Dispatchers.Main) {
                         Toast.makeText(context, "Bookmarked!", Toast.LENGTH_SHORT).show()
                     }
