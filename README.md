@@ -1,7 +1,7 @@
 # 🎬 Welcome to MovieApp!
 Let me introduce the project:
 
-NewsApp is an **Android MDC** e-commerce application built with **Kotlin**.
+MovieApp is an **Android MDC** e-commerce application built with **Kotlin**.
 It follows MVVM Architecture and implements Clean Code principles.
 
 ### 🛠 Built With:
